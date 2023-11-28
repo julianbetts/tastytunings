@@ -29,16 +29,6 @@ window.onload = () => {
     renderFretboard(standardTuning, []);
 };
 
-// Render fretboard function
-// const renderFretboard = (tuning, fingering) => {
-//     const fretboard = document.createElement('table');
-//     // Loop through 6 strings
-//     for (let stringNumber = 0; stringNumber < 6; stringNumber++) {
-//         renderString(fretboard, stringNumber);
-//     }
-//     document.body.appendChild(fretboard);
-// };
-
 const renderFretboard = (tuning, selectedNotes) => {
     fretboard.innerHTML = ''
     // Add fret numbers row
@@ -46,45 +36,43 @@ const renderFretboard = (tuning, selectedNotes) => {
     fretNumbersRow.appendChild(document.createElement('th')); // Empty cell for the bottom 
     // Loop through 6 strings
     for (let stringNumber = 0; stringNumber < 6; stringNumber++) {
-        renderString(fretboard, stringNumber, selectedNotes);
+        renderString(fretboard, tuning, stringNumber, selectedNotes);
     }
-    //extracted function
     renderFretNumbers(fretNumbersRow, fretboard);
     document.body.appendChild(fretboard);
 };
 
-
-// Render string function
-const renderString = (fretboard, stringNumber, selectedNotes) => {
+const renderString = (fretboard, tuning, stringNumber, selectedNotes) => {
     const string = fretboard.appendChild(document.createElement('tr'));
-    var currentNote = standardTuning[stringNumber]
+    var currentNote = tuning[stringNumber]
     string.appendChild(document.createElement('th')).appendChild(createChromaticDropdown(standardTuning[stringNumber]));
     // Loop through 12 frets for the current string
     for (let fretNumber = 0; fretNumber < 12; fretNumber++) {
         const fret = string.appendChild(document.createElement('td'));
-
         if (fretNumber === 0) {
             renderNut(fretNumber, fret, stringNumber);
         } else {
-            renderFret(fret, stringNumber, currentNote, selectedNotes);
-            currentNote++
+            renderFret(fret, currentNote, selectedNotes);
+            if(currentNote === 12) {
+                currentNote = 1
+            } else {
+                currentNote++
+            }
         }
     }
 };
 
 // Render nut function
 const renderNut = (fretNumber, fret, stringNumber) =>  {
-//    if(fretNumber === fingering[stringNumber]) {
-//        fret.innerHTML = 'x';
-//    } else {
-        fret.innerHTML = '|';
-//    }
+    //TODO: highlight nut if the current string is in the chord when open
+    fret.innerHTML = '|';
 };
 
 // Render fret function
-const renderFret = (fret, stringNumber, currentNote, selectedNotes) => {
+const renderFret = (fret, currentNote, selectedNotes) => {
+    //TODO: somehow differentiate different chord positions (e.g. the root vs. the minor third...or at least the first dropdown vs. the second)
     // Check if this fret is fingered in the current chord
-    if(selectedNotes.indexOf(currentNote) > -1) {
+    if(selectedNotes.indexOf(currentNote.toString()) > -1) {
         fret.innerHTML = 'X';
     } else {
        fret.innerHTML = '—';
@@ -141,7 +129,7 @@ function updateSelectedNotes() {
         var selectEl = chordBank.children[i]
         if (selectEl.selectedIndex > 0) {
             if ( selectedNotes.indexOf(selectEl.selectedIndex) < 0) {
-                selectedNotes.push(selectEl.selectedIndex)
+                selectedNotes.push(selectEl.value)
             }
         }
     }            
