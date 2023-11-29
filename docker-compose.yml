@@ -1,0 +1,12 @@
+services:
+    nginx:
+        image: nginx:latest
+        volumes:
+            - ./:/usr/share/nginx/html
+        ports:
+            - "8080:80"
+        environment:
+            LANG: UTF-8
+
+volumes:
+    db:
