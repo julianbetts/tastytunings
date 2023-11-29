@@ -25,7 +25,8 @@ const chromaticNotes = [
 
 // Window onload event
 window.onload = () => {
-    renderChordBank();
+    //     constructor(parentEl, elId, callback) {
+    var chordBank = new ChordBank(document.body, 'chordBank', updateSelectedNotes);
     renderFretboard(standardTuning, []);
 };
 
@@ -66,24 +67,22 @@ const renderFret = (fretEl, currentNote, selectedNotes, fretNumber) => {
     if(noteIsInChord) {
         fretEl.innerHTML = fretNumber == 0 ? '<span class="open">||</span>' : '-X';
     } else {
-        fretEl.innerHTML = fretNumber == 0 ? '| ' : '—-';
+        fretEl.innerHTML = fretNumber == 0 ? '|&nbsp;' : '—-';
     }
 };
 
-const renderChordBank = () => {
-    const chordBankFormEl = document.createElement('form')
-    chordBankFormEl.id = 'chordBank'
-    chordBankFormEl.addEventListener('change', (e) => {
-        updateSelectedNotes()
-    })
-    for (let i = 0; i < 12; i++) {
-
-        const chordNote = createChromaticDropdown();
-
-        chordBankFormEl.appendChild(chordNote);
-    }
-    document.body.appendChild(chordBankFormEl);
-};
+class ChordBank {
+    constructor(parentEl, elId, callback) {
+        const chordBankFormEl = document.createElement('form')
+        chordBankFormEl.id = elId
+        chordBankFormEl.addEventListener('change', callback)
+        for (let i = 0; i < 12; i++) {
+            const chordNote = createChromaticDropdown();
+            chordBankFormEl.appendChild(chordNote);
+        }
+        parentEl.appendChild(chordBankFormEl);
+    };
+}
 
 function renderFretNumbers(fretNumbersRow, fretboard) {
     for (let fretNumber = 0; fretNumber < 12; fretNumber++) {
