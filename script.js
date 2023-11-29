@@ -48,34 +48,25 @@ const renderString = (fretboard, tuning, stringNumber, selectedNotes) => {
     string.appendChild(document.createElement('th')).appendChild(createChromaticDropdown(standardTuning[stringNumber]));
     // Loop through 12 frets for the current string
     for (let fretNumber = 0; fretNumber < 12; fretNumber++) {
-        const fret = string.appendChild(document.createElement('td'));
-        if (fretNumber === 0) {
-            renderNut(fretNumber, fret, stringNumber);
+        const fretEl = string.appendChild(document.createElement('td'));
+        renderFret(fretEl, currentNote, selectedNotes, fretNumber);
+        if(currentNote === 12) {
+            currentNote = 1
         } else {
-            renderFret(fret, currentNote, selectedNotes);
-            if(currentNote === 12) {
-                currentNote = 1
-            } else {
-                currentNote++
-            }
+            currentNote++
         }
     }
 };
 
-// Render nut function
-const renderNut = (fretNumber, fret, stringNumber) =>  {
-    //TODO: highlight nut if the current string is in the chord when open
-    fret.innerHTML = '|';
-};
-
 // Render fret function
-const renderFret = (fret, currentNote, selectedNotes) => {
+const renderFret = (fretEl, currentNote, selectedNotes, fretNumber) => {
     //TODO: somehow differentiate different chord positions (e.g. the root vs. the minor third...or at least the first dropdown vs. the second)
     // Check if this fret is fingered in the current chord
-    if(selectedNotes.indexOf(currentNote.toString()) > -1) {
-        fret.innerHTML = 'X';
+    var noteIsInChord = selectedNotes.indexOf(currentNote.toString()) > -1
+    if(noteIsInChord) {
+        fretEl.innerHTML = fretNumber == 0 ? '<span class="open">||</span>' : '-X';
     } else {
-       fret.innerHTML = '—';
+        fretEl.innerHTML = fretNumber == 0 ? '| ' : '—-';
     }
 };
 
