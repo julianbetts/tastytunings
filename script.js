@@ -1,5 +1,7 @@
-const standardTuning = Array( 8, 3, 11, 6, 1, 8);
-const numberOfFrets = 18
+// scale or chord option, then note or key, then scale(the modes) or chord(common chords, custom),
+
+const standardTuning = Array( 9, 4, 11, 6, 1, 8);
+const numberOfFrets = 17
 const chromaticNotes = [
     {name: 'a♭', value: 12},
     {name: 'a', value: 1},
@@ -21,8 +23,9 @@ const chromaticNotes = [
 ]
 
 window.onload = () => {
-    var fretboard = new Fretboard(standardTuning, [], document.getElementById('fretboard'));
-    var chordBank = new ChordBank(document.getElementById('chordSelector'));
+    let fretboard = new Fretboard(standardTuning, [], document.getElementById('fretboard'));
+    let chordBank = new ChordBank(document.getElementById('chordSelector'));
+    fretboard.chordBank = chordBank
 };
 
 class Fretboard {
@@ -30,7 +33,6 @@ class Fretboard {
         this.fretboardEl = document.createElement('table');
         this.tuning = tuning
         this.selectedNotes = selectedNotes
-        this.containerEl = containerEl
         this.fretboardEl.innerHTML = ''
         // Add fret numbers row
         const fretNumbersRow = document.createElement('tr');
@@ -40,13 +42,20 @@ class Fretboard {
             this.renderString(stringNumber);
         }
         renderFretNumbers(fretNumbersRow, this.fretboardEl);
-        this.containerEl.replaceChildren(this.fretboardEl);
+        containerEl.replaceChildren(this.fretboardEl);
     }
+
 
     renderString(stringNumber) {
         const string = this.fretboardEl.appendChild(document.createElement('tr'));
         var currentNote = this.tuning[stringNumber]
-        string.appendChild(document.createElement('th')).appendChild(createChromaticDropdown(standardTuning[stringNumber]));
+        // this.updateSelectedNotes.bind(this)
+        var tuningEl = document.createElement('th')
+        tuningEl.appendChild(createChromaticDropdown(this.tuning[stringNumber]))
+        tuningEl.addEventListener('change', () => {
+            this.chordBank.updateSelectedNotes()
+        })
+        string.appendChild(tuningEl);
         // Loop through the frets for the current string
         for (let fretNumber = 0; fretNumber < numberOfFrets; fretNumber++) {
             const fretEl = string.appendChild(document.createElement('td'));
@@ -73,7 +82,6 @@ class Fretboard {
 class ChordBank {
     constructor(parentEl) {
         this.formEl = document.createElement('form')
-        this.updateSelectedNotes.bind(this)
         this.formEl.addEventListener('change', () => {
             this.updateSelectedNotes()
         })
@@ -83,22 +91,32 @@ class ChordBank {
         }
         parentEl.appendChild(this.formEl);
     }
+    getTuning() {
+        var tuning = []
+        var tuningSelectEls = document.getElementById('fretboard').getElementsByTagName('select')
+        for (var i = 0; i < tuningSelectEls.length; i++){
+            tuning.push(parseInt(tuningSelectEls[i].value))
+        }
+        return tuning
+    }
 
     updateSelectedNotes() {
         this.selectedNotes = []
      //loop through the children of chordbank and find any selected notes.
         for (var i = 0; i < this.formEl.children.length; i++){
             var selectEl = this.formEl.children[i]
+            // checks whether the value of the selected option is not already in the array
             if (selectEl.selectedIndex > 0) {
                 if (this.selectedNotes.indexOf(selectEl.selectedIndex) < 0) {
+                    // if selected note is unique, it is added to 'selectedNotes' array
                     this.selectedNotes.push(selectEl.value)
                 }
             }
-        }            
-        var fretboard = new Fretboard(standardTuning, this.selectedNotes, document.getElementById('fretboard'));
+        }
+        var fretboard = new Fretboard(this.getTuning(), this.selectedNotes, document.getElementById('fretboard'));
+        fretboard.chordBank = this
     }
 }
-
 function renderFretNumbers(fretNumbersRow, fretboard) {
     for (let fretNumber = 0; fretNumber < numberOfFrets; fretNumber++) {
         const fretNumberCell = document.createElement('th');
