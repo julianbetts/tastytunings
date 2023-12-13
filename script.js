@@ -53,7 +53,9 @@ class Fretboard {
     renderString(stringNumber) {
         const string = this.fretboardEl.appendChild(document.createElement('tr'));
         // i changed from var
-        let currentNote = this.tuning[stringNumber].value
+        let currentNote = chromaticNotes.find((noteObject) => {
+            return noteObject.name === this.tuning[stringNumber].name
+        })
         let tuningEl = document.createElement('th')
         tuningEl.appendChild(createChromaticDropdown(this.tuning[stringNumber]))
         tuningEl.addEventListener('change', () => {
@@ -75,7 +77,7 @@ class Fretboard {
     renderFret(fretCellEl, currentNote, fretNumber) {
         // if note is not selected, it will have an index of -1
         //TODO: somehow differentiate different chord positions (e.g. the root vs. the minor third...or at least the first dropdown vs. the second)
-        var noteIsInChord = this.selectedNotes.indexOf(currentNote.toString()) > -1
+        var noteIsInChord = this.selectedNotes.indexOf(currentNote.name) > -1
         if(noteIsInChord) {
             fretCellEl.innerHTML = fretNumber == 0 ? '<span class="open">||</span>' : '-X';
         } else {
@@ -101,7 +103,12 @@ class ChordBank {
         var tuning = []
         var tuningSelectEls = document.getElementById('fretboard').getElementsByTagName('select')
         for (var i = 0; i < tuningSelectEls.length; i++){
-            tuning.push({ name: tuningSelectEls[i].name, value: parseInt(tuningSelectEls[i].value) })
+            tuning.push({ 
+                name: tuningSelectEls[i].name, 
+                value: chromaticNotes.find((noteObject) => {
+                    return noteObject.value === tuningSelectEls[i].value
+                })
+            })
         }
         return tuning
     }
@@ -140,7 +147,7 @@ function createChromaticDropdown(tuning) {
     chordNote.appendChild(emptyOptionEl);
     for (let j = 0; j < chromaticNotes.length; j++) {
         const optionEl = document.createElement('option');
-        optionEl.value = chromaticNotes[j].value;
+        optionEl.value = chromaticNotes[j].name;
         optionEl.innerText = chromaticNotes[j].name;
         if (tuning && chromaticNotes[j].name === tuning.name){
             optionEl.selected = true
