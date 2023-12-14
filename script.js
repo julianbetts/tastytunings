@@ -50,38 +50,55 @@ class Fretboard {
         containerEl.replaceChildren(this.fretboardEl);
     }
 
+    findNoteByName(noteName) {
+        return chromaticNotes.find((noteObject) => {
+            return noteObject.name === noteName
+        })
+    }
+
+    findNoteByValue(noteValue) {
+        return chromaticNotes.find((noteObject) => {
+            return noteObject.value === noteValue
+        })
+    }
+
+    isNoteInChord(note) {
+        for (let i = 0; i < this.selectedNotes.length; i++) {
+            if (this.findNoteByName(this.selectedNotes[i]).value === note.value) {
+                return true
+            }
+        }
+        return false
+    }
+
     renderString(stringNumber) {
         const string = this.fretboardEl.appendChild(document.createElement('tr'));
         // i changed from var
-        let currentNote = chromaticNotes.find((noteObject) => {
-            return noteObject.name === this.tuning[stringNumber].name
-        })
+        let currentNote = this.findNoteByName(this.tuning[stringNumber].name)
         let tuningEl = document.createElement('th')
         tuningEl.appendChild(createChromaticDropdown(this.tuning[stringNumber]))
         tuningEl.addEventListener('change', () => {
-            this.chordBank.updateSelectedNotes(this.chordBank.getTuning())
+            this.chordBank.updateSelectedNotes()
         })
         string.appendChild(tuningEl);
         // Loop through the frets for the current string
         for (let fretNumber = 0; fretNumber < numberOfFrets; fretNumber++) {
             const fretCellEl = string.appendChild(document.createElement('td'));
             this.renderFret(fretCellEl, currentNote, fretNumber);
-            if(currentNote === 12) {
-                currentNote = 1
+            if(currentNote.value === 12) {
+                currentNote = this.findNoteByValue(1)
             } else {
-                currentNote++
+                currentNote = this.findNoteByValue(currentNote.value + 1)
             }
         }
     }
 
     renderFret(fretCellEl, currentNote, fretNumber) {
-        // if note is not selected, it will have an index of -1
         //TODO: somehow differentiate different chord positions (e.g. the root vs. the minor third...or at least the first dropdown vs. the second)
-        var noteIsInChord = this.selectedNotes.indexOf(currentNote.name) > -1
-        if(noteIsInChord) {
-            fretCellEl.innerHTML = fretNumber == 0 ? '<span class="open">||</span>' : '-X';
+        if(this.isNoteInChord(currentNote)) {
+            fretCellEl.innerHTML = fretNumber == 0 ? '<span class="open">||</span>' : '&nbsp;X|';
         } else {
-            fretCellEl.innerHTML = fretNumber == 0 ? '|&nbsp;' : '—-';
+            fretCellEl.innerHTML = fretNumber == 0 ? '|&nbsp;' : '——|';
         }
     }
 }
@@ -90,7 +107,7 @@ class ChordBank {
     constructor(parentEl) {
         this.formEl = document.createElement('form')
         this.formEl.addEventListener('change', () => {
-            this.updateSelectedNotes(this.fretboard.tuning)
+            this.updateSelectedNotes()
         })
         for (let i = 0; i < 12; i++) {
             const chordNote = createChromaticDropdown();
@@ -104,18 +121,18 @@ class ChordBank {
         var tuningSelectEls = document.getElementById('fretboard').getElementsByTagName('select')
         for (var i = 0; i < tuningSelectEls.length; i++){
             tuning.push({ 
-                name: tuningSelectEls[i].name, 
+                name: tuningSelectEls[i].value, 
                 value: chromaticNotes.find((noteObject) => {
-                    return noteObject.value === tuningSelectEls[i].value
+                    return noteObject.name === tuningSelectEls[i].value
                 })
             })
         }
         return tuning
     }
 
-    updateSelectedNotes(tuning) {
+    updateSelectedNotes() {
         this.selectedNotes = []
-     //loop through the children of chordbank and find any selected notes.
+        //loop through the children of chordbank and find any selected notes.
         for (var i = 0; i < this.formEl.children.length; i++){
             var selectEl = this.formEl.children[i]
             // checks whether the value of the selected option is not already in the array
@@ -126,7 +143,8 @@ class ChordBank {
                 }
             }
         }
-        var fretboard = new Fretboard(tuning, this.selectedNotes, document.getElementById('fretboard'));
+        var fretboard = new Fretboard(this.getTuning(), this.selectedNotes, document.getElementById('fretboard'));
+        this.fretboard = fretboard
         fretboard.chordBank = this
     }
 }
