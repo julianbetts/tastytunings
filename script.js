@@ -1,3 +1,9 @@
+
+// todo put alternate tunings in a dropdown under the fretboard table
+
+//the Modes toggle withs for scales
+//the Chords toggle withs for chords
+
 const chordShapes = [
     { name: 'major', value: [0, 4, 7] },
     { name: 'minor', value: [0, 3, 7] },
@@ -20,8 +26,8 @@ const modes = [
     { name: 'Locrian', value: [0, 1, 3, 5, 6, 8, 10] }
 ]
 const standardTuning = [ 
-    { name: 'f', value: 9 },
-    { name: 'c', value: 4 }, 
+    { name: 'e', value: 8 },
+    { name: 'b', value: 3 }, 
     { name: 'g', value: 11 }, 
     { name: 'd', value: 6 }, 
     { name: 'a', value: 1 }, 
@@ -48,11 +54,33 @@ const chromaticNotes = [
     {name: 'g♯', value: 12}
 ]
 
+const alternatteTunings = [
+    { name: 'standard', value: [8, 3, 11, 6, 1, 8] },
+    { name: 'drop d', value: [8, 3, 11, 6, 1, 6] },
+    { name: 'open d', value: [8, 3, 11, 6, 1, 4] },
+    { name: 'open g', value: [8, 3, 11, 5, 1, 8] },
+    { name: 'open c', value: [8, 3, 10, 5, 1, 8] },
+    { name: 'open e', value: [8, 3, 11, 6, 1, 4] },
+    { name: 'open a', value: [8, 3, 11, 6, 1, 4] },
+    { name: 'open a minor', value: [8, 3, 10, 5, 1, 4] },
+    { name: 'dadgad', value: [8, 3, 11, 6, 1, 8] },
+    { name: 'all fourths', value: [8, 4, 0, 8, 4, 0] },
+    { name: 'drop c', value: [8, 3, 11, 6, 1, 3] },
+    { name: 'drop b', value: [8, 3, 11, 6, 1, 2] },
+    { name: 'drop a', value: [8, 3, 11, 6, 1, 1] },
+    { name: 'drop g', value: [8, 3, 11, 6, 1, 0] },
+    { name: 'drop f', value: [8, 3, 11, 6, 1, 11] },
+    { name: 'drop e', value: [8, 3, 11, 6, 1, 10] },
+    { name: 'drop d♯', value: [8, 3, 11, 6, 1, 9] },
+]
+
 window.onload = () => {
     let fretboard = new Fretboard(standardTuning, [], document.getElementById('fretboard'));
     let chordBank = new ChordSelector(document.getElementById('chordSelector'));
     fretboard.chordBank = chordBank
     chordBank.fretboard = fretboard
+    const alternateTuningsDropdown = fretboard.createAlternateTuningsDropdown();
+    document.getElementById('fretboard').appendChild(alternateTuningsDropdown);
 };
 
 class Fretboard {
@@ -82,6 +110,12 @@ class Fretboard {
         })
     }
 
+    findTuningByName(noteName) {
+        return this.tuning.find((noteObject) => {
+            return noteObject.name === noteName
+        })
+    }
+
     isNoteInChord(note) {
         for (let i = 0; i < this.selectedNotes.length; i++) {
             if (this.findNoteByName(this.selectedNotes[i]).value === note.value) {
@@ -99,7 +133,7 @@ class Fretboard {
             fretCellEl.innerHTML = fretNumber == 0 ? '|&nbsp;' : '——|';
         }
     }
-
+    
     renderString(stringNumber) {
         const string = this.fretboardEl.appendChild(document.createElement('tr'));
         // i changed from var
@@ -123,6 +157,49 @@ class Fretboard {
             }
         }
     }
+
+    createAlternateTuningsDropdown(tuning) {
+        const AlternateTunings = document.createElement('select');
+        const emptyOptionEl = document.createElement('option');
+        AlternateTunings.appendChild(emptyOptionEl);
+        for (let j = 0; j < chromaticNotes.length; j++) {
+            const optionEl = document.createElement('option');
+            optionEl.value = chromaticNotes[j].name;
+            optionEl.innerText = chromaticNotes[j].name;
+            if (tuning && chromaticNotes[j].name === tuning.name){
+                optionEl.selected = true
+            }
+            AlternateTunings.appendChild(optionEl);
+        }
+        return chordNote;
+    }
+
+        createAlternateTuningsDropdown(tuning) {
+            const alternateTuningsDropdown = document.createElement('select');
+            const emptyOptionEl = document.createElement('option');
+            alternateTuningsDropdown.appendChild(emptyOptionEl);
+    
+            for (let j = 0; j < alternatteTunings.length; j++) {
+                const optionEl = document.createElement('option');
+                optionEl.value = alternatteTunings[j].name;
+                optionEl.innerText = alternatteTunings[j].name;
+    
+                if (tuning && alternatteTunings[j].name === tuning.name){
+                    optionEl.selected = true;
+                }
+    
+                alternateTuningsDropdown.appendChild(optionEl);
+            }
+    
+            alternateTuningsDropdown.addEventListener('change', () => {
+                // Handle the change in alternate tuning if needed
+            });
+    
+            return alternateTuningsDropdown;
+        }
+
+    
+
 }
 
 class ChordSelector {
@@ -207,6 +284,7 @@ class ChordSelector {
         fretboard.chordBank = this
         return true
     }
+
     updateSelectedNotes() {
         this.selectedNotes = []
         //loop through the children of chordbank and find any selected notes.
@@ -227,6 +305,7 @@ class ChordSelector {
 }
 
 // todo add to fretboard class
+// numberOfFrets is not defined wiithin the scope of the Fretboard class.
 function renderFretNumbers(fretNumbersRow, fretboard) {
     for (let fretNumber = 0; fretNumber < numberOfFrets; fretNumber++) {
         const fretNumberCell = document.createElement('th');
@@ -255,6 +334,9 @@ function createChromaticDropdown(tuning) {
 
     
 // todo place to chordselector class
+// how to place createChordShapeDropdown in to chordSelector class?
+// the chordShape dropdown is the second child of the chordSelector.
+
 function createChordShapeDropdown() {
     const chordShape = document.createElement('select');
     const emptyOptionEl = document.createElement('option');
@@ -271,3 +353,16 @@ function createChordShapeDropdown() {
     chordShape.appendChild(customOptionEl);
     return chordShape;
 }
+
+// todo make rootnote disappear when custom is selected. how to do this?   
+// do this by adding a listener to the chordShape dropdown. if custom is selected, then show the customNoteSelector. if not, hide it.
+// what type of event listener? change?
+// the type of event listener to use is 'change'. this is because the dropdown is changed.
+// how to hide the rootNote? 
+// the rootNote is the first child of the chordSelector.
+// how do you show the customNoteSelector?
+// the customNoteSelector is the second child of the chordSelector.
+// what type of method is used to show the customNoteSelector?
+// the method is 'style.display = 'block''.
+// what type of method to hide the rootNote?
+// the method is 'style.display = 'none''.
