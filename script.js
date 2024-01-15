@@ -1,39 +1,45 @@
+//todo toggle switch between chord and scale
+//todo change updateSelectedChord to a class? so i can use it for the alternate tuning dropdown event listener?
+//todo make rootNote bold
+const numberOfFrets = 17
 
-// todo put alternate tunings in a dropdown under the fretboard table
-
-//the Modes toggle withs for scales
-//the Chords toggle withs for chords
+const alternatteTunings = [
+    { name: 'standard', value: [8, 3, 11, 6, 1, 8] },
+    { name: 'drop d', value: [8, 3, 11, 6, 1, 6] },
+    { name: 'open d', value: [8, 3, 11, 6, 1, 4] },
+    { name: 'open g', value: [8, 3, 11, 5, 1, 8] },
+    { name: 'open c', value: [8, 3, 10, 5, 1, 8] },
+    { name: 'open e', value: [8, 3, 11, 6, 1, 4] },
+    { name: 'open a', value: [8, 3, 11, 6, 1, 4] },
+    { name: 'open a minor', value: [8, 3, 10, 5, 1, 4] },
+    { name: 'dadgad', value: [8, 3, 11, 6, 1, 8] },
+    { name: 'all fourths', value: [8, 4, 0, 8, 4, 0] }
+]
 
 const chordShapes = [
     { name: 'major', value: [0, 4, 7] },
     { name: 'minor', value: [0, 3, 7] },
-    { name: '7th', value: [0, 4, 7, 10] },
+    { name: 'dominant 7th', value: [0, 4, 7, 10] },
     { name: 'major 7th', value: [0, 4, 7, 11] },
     { name: 'minor 7th', value: [0, 3, 7, 10] },
-    { name: 'diminished', value: [0, 3, 6] },
-    { name: 'augmented', value: [0, 4, 8] },
     { name: 'suspended 2nd', value: [0, 2, 7] },
     { name: 'suspended 4th', value: [0, 5, 7] },
-    { name: '6th', value: [0, 4, 7, 9] }
+    { name: 'major 6th', value: [0, 4, 7, 9] },
+    { name: 'minor 6th', value: [0, 3, 7, 9] },
+    { name: 'diminished', value: [0, 3, 6] },
+    { name: 'augmented', value: [0, 4, 8] },
+    { name: 'dominant 9th', value: [0, 4, 7, 10, 2] },
+    { name: 'major 9th', value: [0, 4, 7, 11, 2] },
+    { name: 'minor 9th', value: [0, 3, 7, 10, 2] },
+    { name: '11th', value: [0, 4, 7, 10, 2, 5] },
+    { name: 'major 11th', value: [0, 4, 7, 11, 2, 5] },
+    { name: 'minor 11th', value: [0, 3, 7, 10, 2, 5] },
+    { name: 'dominant 13th', value: [0, 4, 7, 10, 2, 5, 9] },
+    { name: 'major 13th', value: [0, 4, 7, 11, 2, 5, 9] },
+    { name: 'minor 13th', value: [0, 3, 7, 10, 2, 5, 9] },
+    { name: 'hendrix', value: [0, 4, 7, 10, 3] }
 ]
-const modes = [
-    { name: 'Ionian', value: [0, 2, 4, 5, 7, 9, 11] },
-    { name: 'Dorian', value: [0, 2, 3, 5, 7, 9, 10] },
-    { name: 'Phrygian', value: [0, 1, 3, 5, 7, 8, 10] },
-    { name: 'Lydian', value: [0, 2, 4, 6, 7, 9, 11] },
-    { name: 'Mixolydian', value: [0, 2, 4, 5, 7, 9, 10] },
-    { name: 'Aeolian', value: [0, 2, 3, 5, 7, 8, 10] },
-    { name: 'Locrian', value: [0, 1, 3, 5, 6, 8, 10] }
-]
-const standardTuning = [ 
-    { name: 'e', value: 8 },
-    { name: 'b', value: 3 }, 
-    { name: 'g', value: 11 }, 
-    { name: 'd', value: 6 }, 
-    { name: 'a', value: 1 }, 
-    { name: 'e', value: 8 }
-]
-const numberOfFrets = 17
+
 const chromaticNotes = [
     {name: 'a♭', value: 12},
     {name: 'a', value: 1},
@@ -54,24 +60,22 @@ const chromaticNotes = [
     {name: 'g♯', value: 12}
 ]
 
-const alternatteTunings = [
-    { name: 'standard', value: [8, 3, 11, 6, 1, 8] },
-    { name: 'drop d', value: [8, 3, 11, 6, 1, 6] },
-    { name: 'open d', value: [8, 3, 11, 6, 1, 4] },
-    { name: 'open g', value: [8, 3, 11, 5, 1, 8] },
-    { name: 'open c', value: [8, 3, 10, 5, 1, 8] },
-    { name: 'open e', value: [8, 3, 11, 6, 1, 4] },
-    { name: 'open a', value: [8, 3, 11, 6, 1, 4] },
-    { name: 'open a minor', value: [8, 3, 10, 5, 1, 4] },
-    { name: 'dadgad', value: [8, 3, 11, 6, 1, 8] },
-    { name: 'all fourths', value: [8, 4, 0, 8, 4, 0] },
-    { name: 'drop c', value: [8, 3, 11, 6, 1, 3] },
-    { name: 'drop b', value: [8, 3, 11, 6, 1, 2] },
-    { name: 'drop a', value: [8, 3, 11, 6, 1, 1] },
-    { name: 'drop g', value: [8, 3, 11, 6, 1, 0] },
-    { name: 'drop f', value: [8, 3, 11, 6, 1, 11] },
-    { name: 'drop e', value: [8, 3, 11, 6, 1, 10] },
-    { name: 'drop d♯', value: [8, 3, 11, 6, 1, 9] },
+const modes = [
+    { name: 'Ionian', value: [0, 2, 4, 5, 7, 9, 11] },
+    { name: 'Dorian', value: [0, 2, 3, 5, 7, 9, 10] },
+    { name: 'Phrygian', value: [0, 1, 3, 5, 7, 8, 10] },
+    { name: 'Lydian', value: [0, 2, 4, 6, 7, 9, 11] },
+    { name: 'Mixolydian', value: [0, 2, 4, 5, 7, 9, 10] },
+    { name: 'Aeolian', value: [0, 2, 3, 5, 7, 8, 10] },
+    { name: 'Locrian', value: [0, 1, 3, 5, 6, 8, 10] }
+]
+const standardTuning = [ 
+    { name: 'e', value: 8 },
+    { name: 'b', value: 3 }, 
+    { name: 'g', value: 11 }, 
+    { name: 'd', value: 6 }, 
+    { name: 'a', value: 1 }, 
+    { name: 'e', value: 8 }
 ]
 
 window.onload = () => {
@@ -136,7 +140,6 @@ class Fretboard {
     
     renderString(stringNumber) {
         const string = this.fretboardEl.appendChild(document.createElement('tr'));
-        // i changed from var
         let currentNote = this.findNoteByName(this.tuning[stringNumber].name)
         let tuningEl = document.createElement('th')
         tuningEl.appendChild(createChromaticDropdown(this.tuning[stringNumber]))
@@ -159,47 +162,36 @@ class Fretboard {
     }
 
     createAlternateTuningsDropdown(tuning) {
-        const AlternateTunings = document.createElement('select');
+        const alternateTuningsDropdown = document.createElement('select');
         const emptyOptionEl = document.createElement('option');
-        AlternateTunings.appendChild(emptyOptionEl);
-        for (let j = 0; j < chromaticNotes.length; j++) {
+        alternateTuningsDropdown.appendChild(emptyOptionEl);
+        for (let j = 0; j < alternatteTunings.length; j++) {
             const optionEl = document.createElement('option');
-            optionEl.value = chromaticNotes[j].name;
-            optionEl.innerText = chromaticNotes[j].name;
-            if (tuning && chromaticNotes[j].name === tuning.name){
-                optionEl.selected = true
+            optionEl.value = alternatteTunings[j].name;
+            optionEl.innerText = alternatteTunings[j].name;
+
+            if (tuning && alternatteTunings[j].name === tuning.name){
+                optionEl.selected = true;
             }
-            AlternateTunings.appendChild(optionEl);
+
+            alternateTuningsDropdown.appendChild(optionEl);
         }
-        return chordNote;
+// 
+
+
+
+
+
+
+
+
+// todo add event listener to alternateTuningsDropdown
+        alternateTuningsDropdown.addEventListener('change', () => {
+            // how do i Handle the change in alternate tuning if needed?
+        });
+
+        return alternateTuningsDropdown;
     }
-
-        createAlternateTuningsDropdown(tuning) {
-            const alternateTuningsDropdown = document.createElement('select');
-            const emptyOptionEl = document.createElement('option');
-            alternateTuningsDropdown.appendChild(emptyOptionEl);
-    
-            for (let j = 0; j < alternatteTunings.length; j++) {
-                const optionEl = document.createElement('option');
-                optionEl.value = alternatteTunings[j].name;
-                optionEl.innerText = alternatteTunings[j].name;
-    
-                if (tuning && alternatteTunings[j].name === tuning.name){
-                    optionEl.selected = true;
-                }
-    
-                alternateTuningsDropdown.appendChild(optionEl);
-            }
-    
-            alternateTuningsDropdown.addEventListener('change', () => {
-                // Handle the change in alternate tuning if needed
-            });
-    
-            return alternateTuningsDropdown;
-        }
-
-    
-
 }
 
 class ChordSelector {
@@ -274,7 +266,7 @@ class ChordSelector {
             selectedNotes.push(chromaticNotes.find((noteObject) => {
                 let noteOffset = ((rootNoteObject).value + chord.value[i]) % 12
                 noteOffset = noteOffset === 0 ? 12 : noteOffset
-                console.log(noteObject.value + ' ' + noteOffset)
+                // console.log(noteObject.value + ' ' + noteOffset)
                 return noteObject.value === noteOffset
             }).name)
         }
@@ -351,18 +343,12 @@ function createChordShapeDropdown() {
     customOptionEl.value = 'custom';
     customOptionEl.innerText = 'custom';
     chordShape.appendChild(customOptionEl);
+    // if (chordShape.value === 'custom') {
+    //     rootNote.style.display = 'none'
+    // } else {
+    //     rootNote.style.display = 'none'r
+    // }
     return chordShape;
 }
 
-// todo make rootnote disappear when custom is selected. how to do this?   
-// do this by adding a listener to the chordShape dropdown. if custom is selected, then show the customNoteSelector. if not, hide it.
-// what type of event listener? change?
-// the type of event listener to use is 'change'. this is because the dropdown is changed.
-// how to hide the rootNote? 
-// the rootNote is the first child of the chordSelector.
-// how do you show the customNoteSelector?
-// the customNoteSelector is the second child of the chordSelector.
-// what type of method is used to show the customNoteSelector?
-// the method is 'style.display = 'block''.
-// what type of method to hide the rootNote?
-// the method is 'style.display = 'none''.
+
