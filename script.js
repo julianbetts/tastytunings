@@ -5,7 +5,6 @@ const numberOfFrets = 17
 
 const alternatteTunings = [
     { name: 'standard', value: [8, 3, 11, 6, 1, 8] },
-    { name: 'drop d', value: [8, 3, 11, 6, 1, 6] },
     { name: 'open d', value: [8, 3, 11, 6, 1, 4] },
     { name: 'open g', value: [8, 3, 11, 5, 1, 8] },
     { name: 'open c', value: [8, 3, 10, 5, 1, 8] },
@@ -172,6 +171,8 @@ class Fretboard {
 
             if (tuning && alternatteTunings[j].name === tuning.name){
                 optionEl.selected = true;
+            } else if (alternatteTunings[j].name === 'standard') {
+                optionEl.selected = true;
             }
 
             alternateTuningsDropdown.appendChild(optionEl);
@@ -193,6 +194,14 @@ class Fretboard {
         return alternateTuningsDropdown;
     }
 }
+
+
+
+
+
+
+
+
 
 class ChordSelector {
     constructor(parentEl) {
@@ -224,6 +233,7 @@ class ChordSelector {
         this.customNoteSelector.style.display = 'none'
         parentEl.appendChild(this.customNoteSelector)
     }
+    
 
     getTuning() {
         var tuning = []
@@ -294,6 +304,7 @@ class ChordSelector {
         this.fretboard = fretboard
         fretboard.chordBank = this
     }
+
 }
 
 // todo add to fretboard class
@@ -319,6 +330,7 @@ function createChromaticDropdown(tuning) {
         if (tuning && chromaticNotes[j].name === tuning.name){
             optionEl.selected = true
         }
+
         chordNote.appendChild(optionEl);
     }
     return chordNote;
@@ -343,11 +355,17 @@ function createChordShapeDropdown() {
     customOptionEl.value = 'custom';
     customOptionEl.innerText = 'custom';
     chordShape.appendChild(customOptionEl);
-    // if (chordShape.value === 'custom') {
-    //     rootNote.style.display = 'none'
-    // } else {
-    //     rootNote.style.display = 'none'r
-    // }
+
+    // Add the event listener
+    chordShape.addEventListener('change', function() {
+        var rootNoteEl = document.querySelector('select'); // replace 'select' with the actual selector for your rootNote element
+        if (chordShape.value === 'custom') {
+            rootNoteEl.style.display = 'none';
+        } else {
+            rootNoteEl.style.display = 'block';
+        }
+    });
+
     return chordShape;
 }
 
