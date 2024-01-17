@@ -1,7 +1,12 @@
-body {
-    font-family: 'Courier New', Courier, monospace;
-}
 
 span.open {
     font-weight: bold;
+}
+
+/* center the body */
+body {
+    margin: 0 auto;
+    width: 800px;
+    padding: 20px;
+    font-family: 'Courier New', Courier, monospace;
 }
