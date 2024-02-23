@@ -4,6 +4,16 @@
 //todo change updateSelectedChord to a class? so i can use it for the alternate tuning dropdown event listener?
 //todo make rootNote bold
 const numberOfFrets = 17
+const gradientStartColor = [0x58, 0x0C, 0x30]
+const gradientEndColor = [0xDB, 0xEB, 0xFA]
+const getColorFromHexArray = (hexArray) => {
+    hexString = '#'
+    gradientStartColor.forEach((hexValue) => 
+        hexString += hexValue.toString()
+    )
+    console.log(hexString)
+    return hexString
+}
 const availableTunings = [
     { name: 'standard', value: [8, 3, 11, 6, 1, 8] },
     { name: 'open d', value: [8, 3, 11, 6, 1, 4] },
@@ -89,15 +99,11 @@ window.onload = () => {
 class Fretboard {
     constructor(tuning, selectedNotes, containerEl) {
         this.fretboardEl = document.createElement('table');
-        this.tuning = tuning
-        this.selectedNotes = selectedNotes
-        this.fretboardEl.innerHTML = ''
-        const fretNumbersRow = document.createElement('tr');
-        fretNumbersRow.appendChild(document.createElement('th')); // Empty cell for the bottom 
-        for (let stringNumber = 0; stringNumber < 6; stringNumber++) {
-            this.renderString(stringNumber);
-        }
-        this.renderFretNumbers(fretNumbersRow, this.fretboardEl);
+        // this.tuning = tuning
+        // this.selectedNotes = selectedNotes
+        this.setTuning(tuning)
+        this.setSelectedNotes(selectedNotes)
+        this.render()
         containerEl.replaceChildren(this.fretboardEl);
     }
 
@@ -126,6 +132,16 @@ class Fretboard {
             }
         }
         return false
+    }
+
+    render() {
+        this.fretboardEl.innerHTML = ''
+        const fretNumbersRow = document.createElement('tr')
+        fretNumbersRow.appendChild(document.createElement('th')) // Empty cell for the bottom 
+        for (let stringNumber = 0; stringNumber < 6; stringNumber++) {
+            this.renderString(stringNumber)
+        }
+        this.renderFretNumbers(fretNumbersRow, this.fretboardEl)
     }
 
     renderFret(fretCellEl, currentNote, fretNumber) {
@@ -171,6 +187,14 @@ class Fretboard {
             }
         }
     }
+
+    setSelectedNotes(selectedNotes) {
+        this.selectedNotes = selectedNotes
+    }
+
+    setTuning(tuning) {
+        this.tuning = tuning
+    }
 }
 
 class ChordSelector {
@@ -188,7 +212,7 @@ class ChordSelector {
         this.chordSelectorEl.querySelector('.rootNoteSelector').appendChild(this.rootNoteSelectorEl)
         this.chordShapeSelector = this.createChordShapeDropdown()
         this.chordSelectorEl.querySelector('.chordShapeSelector').appendChild(this.chordShapeSelector)
-        parentEl.appendChild(this.chordSelectorEl)
+        this.notesInChordEl = parentEl.querySelector('.notesInChord')
     }
 
     createChordShapeDropdown() {
@@ -249,6 +273,16 @@ class ChordSelector {
         this.customNoteSelector.style.display = 'block'
     }
 
+    updateNotesInChordEl() {
+        this.notesInChordEl.innerHTML = ''
+        for (var i = 0; i < this.selectedNotes.length; i++){
+            let note = document.createElement('li')
+            note.innerHTML = this.selectedNotes[i]
+            note.style.backgroundColor = getColorFromHexArray(gradientStartColor)
+            this.notesInChordEl.appendChild(note)
+        }
+    }
+
     updateSelectedChord() {
         var rootNote = this.rootNoteSelectorEl.value
         var chordShape = this.chordShapeSelector.value
@@ -278,9 +312,10 @@ class ChordSelector {
             }).name)
         }
         this.selectedNotes = selectedNotes
-        var fretboard = new Fretboard(this.getTuning(), this.selectedNotes, document.getElementById('fretboard'));
-        this.fretboard = fretboard
-        fretboard.chordSelector = this
+        this.updateNotesInChordEl()
+        this.fretboard.setTuning(this.getTuning())
+        this.fretboard.setSelectedNotes(this.selectedNotes)
+        this.fretboard.render()
         return true
     }
 
@@ -297,9 +332,12 @@ class ChordSelector {
                 }
             }
         }
-        var fretboard = new Fretboard(this.getTuning(), this.selectedNotes, document.getElementById('fretboard'));
-        this.fretboard = fretboard
-        fretboard.chordSelector = this
+        // var fretboard = new Fretboard(this.getTuning(), this.selectedNotes, document.getElementById('fretboard'));
+        // this.fretboard = fretboard
+        // fretboard.chordSelector = this
+        this.fretboard.setTuning(this.getTuning())
+        this.fretboard.setSelectedNotes(this.selectedNotes)
+        this.fretboard.render()
     }
 
 }
