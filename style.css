@@ -23,8 +23,11 @@ div {
     padding-inline-start: 0;
 }
 .notesInChord li {
+    border: 15px solid #fff;
     float: left;
-    padding-right: 20px;
+    padding: 5px;
+    text-align: center;
+    width: 20px;
 }
 
 .tuningSelector {

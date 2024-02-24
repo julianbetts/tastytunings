@@ -8,11 +8,33 @@ const gradientStartColor = [0x58, 0x0C, 0x30]
 const gradientEndColor = [0xDB, 0xEB, 0xFA]
 const getColorFromHexArray = (hexArray) => {
     hexString = '#'
-    gradientStartColor.forEach((hexValue) => 
-        hexString += hexValue.toString()
-    )
-    console.log(hexString)
+    hexArray.forEach((hexValue) => {
+        let colorValueString = hexValue.toString(16)
+        if (colorValueString.length == 1) colorValueString = '0' + colorValueString
+        hexString += colorValueString
+    })
     return hexString
+}
+const getGradient = (startColor, endColor, numberOfIncrements) => {
+    //create an array of colors with the startColor as the first element
+    let gradient = [getColorFromHexArray(startColor)]
+    //start at the next increment
+    for (let i = 1; i < numberOfIncrements; i++) {
+        //if we're at the last increment, use the end color
+        if (i == (numberOfIncrements - 1)) {
+            gradient[i] = getColorFromHexArray(endColor)
+        } else {
+            //lets build an rgb color
+            let rgb = []
+            startColor.forEach((hexValue, j) => {
+                let colorValueDifference = hexValue - endColor[j]
+                let colorIncrement = Math.floor(colorValueDifference / (numberOfIncrements - 1))
+                rgb[j] = hexValue - (colorIncrement * i)
+            })
+            gradient[i] = getColorFromHexArray(rgb)
+        }
+    }
+    return gradient
 }
 const availableTunings = [
     { name: 'standard', value: [8, 3, 11, 6, 1, 8] },
@@ -275,10 +297,11 @@ class ChordSelector {
 
     updateNotesInChordEl() {
         this.notesInChordEl.innerHTML = ''
+        let gradient = getGradient(gradientStartColor, gradientEndColor, this.selectedNotes.length)
         for (var i = 0; i < this.selectedNotes.length; i++){
             let note = document.createElement('li')
             note.innerHTML = this.selectedNotes[i]
-            note.style.backgroundColor = getColorFromHexArray(gradientStartColor)
+            note.style.borderColor = gradient[i]
             this.notesInChordEl.appendChild(note)
         }
     }
@@ -307,7 +330,6 @@ class ChordSelector {
             selectedNotes.push(chromaticNotes.find((noteObject) => {
                 let noteOffset = ((rootNoteObject).value + chord.value[i]) % 12
                 noteOffset = noteOffset === 0 ? 12 : noteOffset
-                // console.log(noteObject.value + ' ' + noteOffset)
                 return noteObject.value === noteOffset
             }).name)
         }
