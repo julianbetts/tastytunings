@@ -4,6 +4,38 @@
 //todo change updateSelectedChord to a class? so i can use it for the alternate tuning dropdown event listener?
 //todo make rootNote bold
 const numberOfFrets = 17
+const gradientStartColor = [0xDB, 0xEB, 0xFA]
+const gradientEndColor = [0x58, 0x0C, 0x30]
+const getColorFromHexArray = (hexArray) => {
+    hexString = '#'
+    hexArray.forEach((hexValue) => {
+        let colorValueString = hexValue.toString(16)
+        if (colorValueString.length == 1) colorValueString = '0' + colorValueString
+        hexString += colorValueString
+    })
+    return hexString
+}
+const getGradient = (startColor, endColor, numberOfIncrements) => {
+    //create an array of colors with the startColor as the first element
+    let gradient = [getColorFromHexArray(startColor)]
+    //start at the next increment
+    for (let i = 1; i < numberOfIncrements; i++) {
+        //if we're at the last increment, use the end color
+        if (i == (numberOfIncrements - 1)) {
+            gradient[i] = getColorFromHexArray(endColor)
+        } else {
+            //lets build an rgb color
+            let rgb = []
+            startColor.forEach((hexValue, j) => {
+                let colorValueDifference = hexValue - endColor[j]
+                let colorIncrement = Math.floor(colorValueDifference / (numberOfIncrements - 1))
+                rgb[j] = hexValue - (colorIncrement * i)
+            })
+            gradient[i] = getColorFromHexArray(rgb)
+        }
+    }
+    return gradient
+}
 const availableTunings = [
     { name: 'standard', value: [8, 3, 11, 6, 1, 8] },
     { name: 'open d', value: [8, 3, 11, 6, 1, 4] },
@@ -89,15 +121,11 @@ window.onload = () => {
 class Fretboard {
     constructor(tuning, selectedNotes, containerEl) {
         this.fretboardEl = document.createElement('table');
-        this.tuning = tuning
-        this.selectedNotes = selectedNotes
-        this.fretboardEl.innerHTML = ''
-        const fretNumbersRow = document.createElement('tr');
-        fretNumbersRow.appendChild(document.createElement('th')); // Empty cell for the bottom 
-        for (let stringNumber = 0; stringNumber < 6; stringNumber++) {
-            this.renderString(stringNumber);
-        }
-        this.renderFretNumbers(fretNumbersRow, this.fretboardEl);
+        // this.tuning = tuning
+        // this.selectedNotes = selectedNotes
+        this.setTuning(tuning)
+        this.setSelectedNotes(selectedNotes)
+        this.render()
         containerEl.replaceChildren(this.fretboardEl);
     }
 
@@ -126,6 +154,16 @@ class Fretboard {
             }
         }
         return false
+    }
+
+    render() {
+        this.fretboardEl.innerHTML = ''
+        const fretNumbersRow = document.createElement('tr')
+        fretNumbersRow.appendChild(document.createElement('th')) // Empty cell for the bottom 
+        for (let stringNumber = 0; stringNumber < 6; stringNumber++) {
+            this.renderString(stringNumber)
+        }
+        this.renderFretNumbers(fretNumbersRow, this.fretboardEl)
     }
 
     renderFret(fretCellEl, currentNote, fretNumber) {
@@ -171,6 +209,14 @@ class Fretboard {
             }
         }
     }
+
+    setSelectedNotes(selectedNotes) {
+        this.selectedNotes = selectedNotes
+    }
+
+    setTuning(tuning) {
+        this.tuning = tuning
+    }
 }
 
 class ChordSelector {
@@ -188,7 +234,7 @@ class ChordSelector {
         this.chordSelectorEl.querySelector('.rootNoteSelector').appendChild(this.rootNoteSelectorEl)
         this.chordShapeSelector = this.createChordShapeDropdown()
         this.chordSelectorEl.querySelector('.chordShapeSelector').appendChild(this.chordShapeSelector)
-        parentEl.appendChild(this.chordSelectorEl)
+        this.notesInChordEl = parentEl.querySelector('.notesInChord')
     }
 
     createChordShapeDropdown() {
@@ -249,6 +295,17 @@ class ChordSelector {
         this.customNoteSelector.style.display = 'block'
     }
 
+    updateNotesInChordEl() {
+        this.notesInChordEl.innerHTML = ''
+        let gradient = getGradient(gradientStartColor, gradientEndColor, this.selectedNotes.length)
+        for (var i = 0; i < this.selectedNotes.length; i++){
+            let note = document.createElement('li')
+            note.innerHTML = this.selectedNotes[i]
+            note.style.borderColor = gradient[i]
+            this.notesInChordEl.appendChild(note)
+        }
+    }
+
     updateSelectedChord() {
         var rootNote = this.rootNoteSelectorEl.value
         var chordShape = this.chordShapeSelector.value
@@ -273,14 +330,14 @@ class ChordSelector {
             selectedNotes.push(chromaticNotes.find((noteObject) => {
                 let noteOffset = ((rootNoteObject).value + chord.value[i]) % 12
                 noteOffset = noteOffset === 0 ? 12 : noteOffset
-                // console.log(noteObject.value + ' ' + noteOffset)
                 return noteObject.value === noteOffset
             }).name)
         }
         this.selectedNotes = selectedNotes
-        var fretboard = new Fretboard(this.getTuning(), this.selectedNotes, document.getElementById('fretboard'));
-        this.fretboard = fretboard
-        fretboard.chordSelector = this
+        this.updateNotesInChordEl()
+        this.fretboard.setTuning(this.getTuning())
+        this.fretboard.setSelectedNotes(this.selectedNotes)
+        this.fretboard.render()
         return true
     }
 
@@ -297,9 +354,12 @@ class ChordSelector {
                 }
             }
         }
-        var fretboard = new Fretboard(this.getTuning(), this.selectedNotes, document.getElementById('fretboard'));
-        this.fretboard = fretboard
-        fretboard.chordSelector = this
+        // var fretboard = new Fretboard(this.getTuning(), this.selectedNotes, document.getElementById('fretboard'));
+        // this.fretboard = fretboard
+        // fretboard.chordSelector = this
+        this.fretboard.setTuning(this.getTuning())
+        this.fretboard.setSelectedNotes(this.selectedNotes)
+        this.fretboard.render()
     }
 
 }

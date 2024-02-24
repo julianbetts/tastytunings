@@ -10,3 +10,27 @@ body {
     padding: 20px;
     font-family: 'Courier New', Courier, monospace;
 }
+
+div {
+    float: left;
+    clear: left;
+}
+
+.notesInChord {
+    float: left;
+    height: 1em;
+    list-style-type: none;
+    padding-inline-start: 0;
+}
+.notesInChord li {
+    border: 15px solid #fff;
+    float: left;
+    padding: 5px;
+    text-align: center;
+    width: 20px;
+}
+
+.tuningSelector {
+    clear: left;
+    margin-top: 10px
+}
