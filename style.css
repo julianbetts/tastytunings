@@ -11,6 +11,14 @@ body {
     font-family: 'Courier New', Courier, monospace;
 }
 
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
 div {
     float: left;
     clear: left;
@@ -34,3 +42,10 @@ div {
     clear: left;
     margin-top: 10px
 }
+
+.ultra-regular {
+    font-family: "Ultra", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
