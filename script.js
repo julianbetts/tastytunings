@@ -4,8 +4,8 @@
 //todo change updateSelectedChord to a class? so i can use it for the alternate tuning dropdown event listener?
 //todo make rootNote bold
 const numberOfFrets = 17
-const gradientStartColor = [0xDB, 0xEB, 0xFA]
-const gradientEndColor = [0x58, 0x0C, 0x30]
+const gradientStartColor = [0x58, 0x0C, 0x30]
+const gradientEndColor = [0xDB, 0xEB, 0xFA]
 const getColorFromHexArray = (hexArray) => {
     hexString = '#'
     hexArray.forEach((hexValue) => {
@@ -418,6 +418,7 @@ class TuningSelector {
         parentEl.appendChild(this.tuningSelectorEl)
     }
 }
+
     
 function createChromaticDropdown(tuning) {
     const chordNote = document.createElement('select');
