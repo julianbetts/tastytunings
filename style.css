@@ -1,35 +1,36 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0 auto;
+    padding: 20px;
+    width: 800px;
+}
+
+div {
+    clear: left;
+    float: left;
+}
+
+h1 {
+    font-family: "Ultra", serif;
+    font-weight: 400;
+    font-style: normal;
+}
 
 span.open {
     font-weight: bold;
 }
 
-/* center the body */
-body {
-    margin: 0 auto;
-    width: 800px;
-    padding: 20px;
-    font-family: 'Courier New', Courier, monospace;
-}
-
-.center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-
-div {
-    float: left;
-    clear: left;
-}
-
 .notesInChord {
     float: left;
     height: 1em;
+    left: 50%;
     list-style-type: none;
     padding-inline-start: 0;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
+
 .notesInChord li {
     border: 15px solid #fff;
     float: left;
@@ -43,9 +44,7 @@ div {
     margin-top: 10px
 }
 
-.ultra-regular {
-    font-family: "Ultra", serif;
-    font-weight: 400;
-    font-style: normal;
-  }
+
+
+
   
