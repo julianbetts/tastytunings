@@ -234,7 +234,7 @@ class ChordSelector {
         this.chordSelectorEl.querySelector('.rootNoteSelector').appendChild(this.rootNoteSelectorEl)
         this.chordShapeSelector = this.createChordShapeDropdown()
         this.chordSelectorEl.querySelector('.chordShapeSelector').appendChild(this.chordShapeSelector)
-        this.notesInChordEl = parentEl.querySelector('.notesInChord')
+        this.notesInChordEl = document.getElementById('notesInChord')
     }
 
     createChordShapeDropdown() {
