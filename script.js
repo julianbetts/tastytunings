@@ -121,8 +121,7 @@ window.onload = () => {
 class Fretboard {
     constructor(tuning, selectedNotes, containerEl) {
         this.fretboardEl = document.createElement('table');
-        // this.tuning = tuning
-        // this.selectedNotes = selectedNotes
+        this.noteColors = []
         this.setTuning(tuning)
         this.setSelectedNotes(selectedNotes)
         this.render()
@@ -169,9 +168,12 @@ class Fretboard {
     renderFret(fretCellEl, currentNote, fretNumber) {
         //TODO: somehow differentiate different chord positions (e.g. the root vs. the minor third...or at least the first dropdown vs. the second)
         if(this.isNoteInChord(currentNote)) {
-            fretCellEl.innerHTML = fretNumber == 0 ? '<span class="open">||</span>' : '&nbsp;X|';
+            fretCellEl.innerHTML = fretNumber == 0 ? '<span class="open">||</span>' : '&nbsp;&nbsp;&nbsp;';
+            fretCellEl.style.backgroundColor = this.noteColors.find((noteColor) => 
+               noteColor.name === currentNote.name).color
+            fretCellEl.style.borderColor = fretNumber == 0 ? 'none' : this.noteColors[0].color
         } else {
-            fretCellEl.innerHTML = fretNumber == 0 ? '|&nbsp;' : '——|';
+            fretCellEl.innerHTML = fretNumber == 0 ? '||' : '———';
         }
     }
     
@@ -297,11 +299,13 @@ class ChordSelector {
 
     updateNotesInChordEl() {
         this.notesInChordEl.innerHTML = ''
+        this.fretboard.noteColors = []
         let gradient = getGradient(gradientStartColor, gradientEndColor, this.selectedNotes.length)
         for (var i = 0; i < this.selectedNotes.length; i++){
             let note = document.createElement('li')
             note.innerHTML = this.selectedNotes[i]
             note.style.borderColor = gradient[i]
+            this.fretboard.noteColors.push({name: this.selectedNotes[i], color: gradient[i]})
             this.notesInChordEl.appendChild(note)
         }
     }
