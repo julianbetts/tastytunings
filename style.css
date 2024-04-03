@@ -26,9 +26,6 @@ span.open {
     left: 50%;
     list-style-type: none;
     padding-inline-start: 0;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .notesInChord li {
