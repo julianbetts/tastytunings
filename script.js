@@ -37,15 +37,35 @@ const getGradient = (startColor, endColor, numberOfIncrements) => {
     return gradient
 }
 const availableTunings = [
-    { name: 'standard', value: [8, 3, 11, 6, 1, 8] },
-    { name: 'open d', value: [8, 3, 11, 6, 1, 4] },
-    { name: 'open g', value: [8, 3, 11, 5, 1, 8] },
-    { name: 'open c', value: [8, 3, 10, 5, 1, 8] },
-    { name: 'open e', value: [8, 3, 11, 6, 1, 4] },
-    { name: 'open a', value: [8, 3, 11, 6, 1, 4] },
-    { name: 'open a minor', value: [8, 3, 10, 5, 1, 4] },
-    { name: 'dadgad', value: [8, 3, 11, 6, 1, 8] },
-    { name: 'all fourths', value: [8, 4, 0, 8, 4, 0] }
+    { name: 'standard', notes: [{ name: 'e', value: '8' }, { name: 'b', value: '3' }, { name: 'g', value: '11' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'e', value: '8' }] },
+    { name: 'open d', value: [{ name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'f#', value: '10' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'd', value: '6' }] },
+    { name: 'open g', value: [{ name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'g', value: '11' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'd', value: '6' }] }
+    // { name: 'open c', value: [{ name: '', value: '8' }, { name: '', value: '3' }, { name: '', value: '10' }, { name: '', value: '5' }, { name: '', value: '1' }, { name: '', value: '8' }] },
+    // { name: 'open e', value: [{ name: '', value: '8' }, { name: '', value: '3' }, { name: '', value: '11' }, { name: '', value: '6' }, { name: '', value: '1' }, { name: '', value: '4' }] },
+    // { name: 'open a', value: [{ name: '', value: '8' }, { name: '', value: '3' }, { name: '', value: '11' }, { name: '', value: '6' }, { name: '', value: '1' }, { name: '', value: '4' }] },
+    // { name: 'open a minor', value: [{ name: '', value: '8' }, { name: '', value: '3' }, { name: '', value: '10' }, { name: '', value: '5' }, { name: '', value: '1' }, { name: '', value: '4' }] },
+    // { name: 'dadgad', value: [{ name: '', value: '8' }, { name: '', value: '3' }, { name: '', value: '11' }, { name: '', value: '6' }, { name: '', value: '1' }, { name: '', value: '8' }] },
+    // { name: 'all fourths', value: [{ name: '', value: '8' }, { name: '', value: '4' }, { name: '', value: '0' }, { name: '', value: '8' }, { name: '', value: '4' }, { name: '', value: '0' }] }
+]
+
+const chromaticNotes = [
+    {name: 'a♭', value: 12},
+    {name: 'a', value: 1},
+    {name: 'a♯', value: 2}, 
+    {name: 'b♭', value: 2}, 
+    {name: 'b', value: 3}, 
+    {name: 'c', value: 4}, 
+    {name: 'c♯', value: 5}, 
+    {name: 'd♭', value: 5}, 
+    {name: 'd', value: 6}, 
+    {name: 'd♯', value: 7}, 
+    {name: 'e♭', value: 7}, 
+    {name: 'e', value: 8}, 
+    {name: 'f', value: 9}, 
+    {name: 'f♯', value: 10},
+    {name: 'g♭', value: 10}, 
+    {name: 'g', value: 11}, 
+    {name: 'g♯', value: 12}
 ]
 
 const chordShapes = [
@@ -70,26 +90,6 @@ const chordShapes = [
     { name: 'diminished', value: [0, 3, 6] },
     { name: 'augmented', value: [0, 4, 8] },
     { name: 'hendrix', value: [0, 4, 7, 10, 3] }
-]
-
-const chromaticNotes = [
-    {name: 'a♭', value: 12},
-    {name: 'a', value: 1},
-    {name: 'a♯', value: 2}, 
-    {name: 'b♭', value: 2}, 
-    {name: 'b', value: 3}, 
-    {name: 'c', value: 4}, 
-    {name: 'c♯', value: 5}, 
-    {name: 'd♭', value: 5}, 
-    {name: 'd', value: 6}, 
-    {name: 'd♯', value: 7}, 
-    {name: 'e♭', value: 7}, 
-    {name: 'e', value: 8}, 
-    {name: 'f', value: 9}, 
-    {name: 'f♯', value: 10},
-    {name: 'g♭', value: 10}, 
-    {name: 'g', value: 11}, 
-    {name: 'g♯', value: 12}
 ]
 
 const modes = [
