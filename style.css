@@ -21,6 +21,7 @@ span.open {
 }
 
 .notesInChord {
+    clear: left;
     float: left;
     height: 1em;
     left: 50%;
@@ -29,12 +30,23 @@ span.open {
 }
 
 .notesInChord li {
-    border: 15px solid #fff;
+    border: 1px solid #fff;
     float: left;
     padding: 5px;
-    text-align: center;
-    width: 20px;
+    height: 40px;
+    width: 40px;
 }
+
+.notesInChord li div {
+    background-color: white;
+    border-radius: 15px;
+    height: 30px;
+    margin-top: 5px;
+    margin-left: 5px;
+    text-align: center;
+    width: 30px;
+}
+
 
 .tuningSelector {
     clear: left;

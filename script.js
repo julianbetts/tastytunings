@@ -37,15 +37,29 @@ const getGradient = (startColor, endColor, numberOfIncrements) => {
     return gradient
 }
 const availableTunings = [
-    { name: 'standard', value: [8, 3, 11, 6, 1, 8] },
-    { name: 'open d', value: [8, 3, 11, 6, 1, 4] },
-    { name: 'open g', value: [8, 3, 11, 5, 1, 8] },
-    { name: 'open c', value: [8, 3, 10, 5, 1, 8] },
-    { name: 'open e', value: [8, 3, 11, 6, 1, 4] },
-    { name: 'open a', value: [8, 3, 11, 6, 1, 4] },
-    { name: 'open a minor', value: [8, 3, 10, 5, 1, 4] },
-    { name: 'dadgad', value: [8, 3, 11, 6, 1, 8] },
-    { name: 'all fourths', value: [8, 4, 0, 8, 4, 0] }
+    { name: 'standard', tuning: [{ name: 'e', value: '8' }, { name: 'b', value: '3' }, { name: 'g', value: '11' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'e', value: '8' }] },
+    { name: 'open d', tuning: [{ name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'f♯', value: '10' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'd', value: '6' }] },
+    { name: 'open g', tuning: [{ name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'g', value: '11' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'd', value: '6' }] }
+]
+
+const chromaticNotes = [
+    {name: 'a♭', value: 12},
+    {name: 'a', value: 1},
+    {name: 'a♯', value: 2}, 
+    {name: 'b♭', value: 2}, 
+    {name: 'b', value: 3}, 
+    {name: 'c', value: 4}, 
+    {name: 'c♯', value: 5}, 
+    {name: 'd♭', value: 5}, 
+    {name: 'd', value: 6}, 
+    {name: 'd♯', value: 7}, 
+    {name: 'e♭', value: 7}, 
+    {name: 'e', value: 8}, 
+    {name: 'f', value: 9}, 
+    {name: 'f♯', value: 10},
+    {name: 'g♭', value: 10}, 
+    {name: 'g', value: 11}, 
+    {name: 'g♯', value: 12}
 ]
 
 const chordShapes = [
@@ -70,26 +84,6 @@ const chordShapes = [
     { name: 'diminished', value: [0, 3, 6] },
     { name: 'augmented', value: [0, 4, 8] },
     { name: 'hendrix', value: [0, 4, 7, 10, 3] }
-]
-
-const chromaticNotes = [
-    {name: 'a♭', value: 12},
-    {name: 'a', value: 1},
-    {name: 'a♯', value: 2}, 
-    {name: 'b♭', value: 2}, 
-    {name: 'b', value: 3}, 
-    {name: 'c', value: 4}, 
-    {name: 'c♯', value: 5}, 
-    {name: 'd♭', value: 5}, 
-    {name: 'd', value: 6}, 
-    {name: 'd♯', value: 7}, 
-    {name: 'e♭', value: 7}, 
-    {name: 'e', value: 8}, 
-    {name: 'f', value: 9}, 
-    {name: 'f♯', value: 10},
-    {name: 'g♭', value: 10}, 
-    {name: 'g', value: 11}, 
-    {name: 'g♯', value: 12}
 ]
 
 const modes = [
@@ -302,11 +296,14 @@ class ChordSelector {
         this.fretboard.noteColors = []
         let gradient = getGradient(gradientStartColor, gradientEndColor, this.selectedNotes.length)
         for (var i = 0; i < this.selectedNotes.length; i++){
-            let note = document.createElement('li')
+            let noteContainer = document.createElement('li')
+            noteContainer.style.borderColor = gradient[0]
+            noteContainer.style.backgroundColor = gradient[i]
+            let note = document.createElement('div')
             note.innerHTML = this.selectedNotes[i]
-            note.style.borderColor = gradient[i]
+            noteContainer.appendChild(note)
             this.fretboard.noteColors.push({name: this.selectedNotes[i], color: gradient[i]})
-            this.notesInChordEl.appendChild(note)
+            this.notesInChordEl.appendChild(noteContainer)
         }
     }
 
@@ -388,6 +385,7 @@ class TuningSelector {
     //     return tuningEl;
     // }
 
+
     createTuningDropdown(tuning) {
         const tuningDropdownEl = document.createElement('select');
         tuningDropdownEl.id = 'alternateTunings'; 
@@ -420,6 +418,14 @@ class TuningSelector {
         this.tuningSelectorDropdown = this.createTuningDropdown(this.fretboard.tuning)
         this.tuningSelectorEl.querySelector('.tuningSelector').appendChild(this.tuningSelectorDropdown)
         parentEl.appendChild(this.tuningSelectorEl)
+    }
+
+    updateSelectedTuning() {
+        var selectedTuning = availableTunings.find((tuningObject) => {
+            return tuningObject.name === this.tuningSelectorDropdown.value
+        })
+        this.fretboard.setTuning(selectedTuning.tuning)
+        this.fretboard.render()
     }
 }
 
