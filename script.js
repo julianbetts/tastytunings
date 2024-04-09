@@ -296,11 +296,14 @@ class ChordSelector {
         this.fretboard.noteColors = []
         let gradient = getGradient(gradientStartColor, gradientEndColor, this.selectedNotes.length)
         for (var i = 0; i < this.selectedNotes.length; i++){
-            let note = document.createElement('li')
+            let noteContainer = document.createElement('li')
+            noteContainer.style.borderColor = gradient[0]
+            noteContainer.style.backgroundColor = gradient[i]
+            let note = document.createElement('div')
             note.innerHTML = this.selectedNotes[i]
-            note.style.borderColor = gradient[i]
+            noteContainer.appendChild(note)
             this.fretboard.noteColors.push({name: this.selectedNotes[i], color: gradient[i]})
-            this.notesInChordEl.appendChild(note)
+            this.notesInChordEl.appendChild(noteContainer)
         }
     }
 
