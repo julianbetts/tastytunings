@@ -37,15 +37,9 @@ const getGradient = (startColor, endColor, numberOfIncrements) => {
     return gradient
 }
 const availableTunings = [
-    { name: 'standard', notes: [{ name: 'e', value: '8' }, { name: 'b', value: '3' }, { name: 'g', value: '11' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'e', value: '8' }] },
-    { name: 'open d', value: [{ name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'f#', value: '10' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'd', value: '6' }] },
-    { name: 'open g', value: [{ name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'g', value: '11' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'd', value: '6' }] }
-    // { name: 'open c', value: [{ name: '', value: '8' }, { name: '', value: '3' }, { name: '', value: '10' }, { name: '', value: '5' }, { name: '', value: '1' }, { name: '', value: '8' }] },
-    // { name: 'open e', value: [{ name: '', value: '8' }, { name: '', value: '3' }, { name: '', value: '11' }, { name: '', value: '6' }, { name: '', value: '1' }, { name: '', value: '4' }] },
-    // { name: 'open a', value: [{ name: '', value: '8' }, { name: '', value: '3' }, { name: '', value: '11' }, { name: '', value: '6' }, { name: '', value: '1' }, { name: '', value: '4' }] },
-    // { name: 'open a minor', value: [{ name: '', value: '8' }, { name: '', value: '3' }, { name: '', value: '10' }, { name: '', value: '5' }, { name: '', value: '1' }, { name: '', value: '4' }] },
-    // { name: 'dadgad', value: [{ name: '', value: '8' }, { name: '', value: '3' }, { name: '', value: '11' }, { name: '', value: '6' }, { name: '', value: '1' }, { name: '', value: '8' }] },
-    // { name: 'all fourths', value: [{ name: '', value: '8' }, { name: '', value: '4' }, { name: '', value: '0' }, { name: '', value: '8' }, { name: '', value: '4' }, { name: '', value: '0' }] }
+    { name: 'standard', tuning: [{ name: 'e', value: '8' }, { name: 'b', value: '3' }, { name: 'g', value: '11' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'e', value: '8' }] },
+    { name: 'open d', tuning: [{ name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'f♯', value: '10' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'd', value: '6' }] },
+    { name: 'open g', tuning: [{ name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'g', value: '11' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'd', value: '6' }] }
 ]
 
 const chromaticNotes = [
@@ -388,6 +382,7 @@ class TuningSelector {
     //     return tuningEl;
     // }
 
+
     createTuningDropdown(tuning) {
         const tuningDropdownEl = document.createElement('select');
         tuningDropdownEl.id = 'alternateTunings'; 
@@ -420,6 +415,14 @@ class TuningSelector {
         this.tuningSelectorDropdown = this.createTuningDropdown(this.fretboard.tuning)
         this.tuningSelectorEl.querySelector('.tuningSelector').appendChild(this.tuningSelectorDropdown)
         parentEl.appendChild(this.tuningSelectorEl)
+    }
+
+    updateSelectedTuning() {
+        var selectedTuning = availableTunings.find((tuningObject) => {
+            return tuningObject.name === this.tuningSelectorDropdown.value
+        })
+        this.fretboard.setTuning(selectedTuning.tuning)
+        this.fretboard.render()
     }
 }
 
