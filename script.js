@@ -39,7 +39,8 @@ const getGradient = (startColor, endColor, numberOfIncrements) => {
 const availableTunings = [
     { name: 'standard', tuning: [{ name: 'e', value: '8' }, { name: 'b', value: '3' }, { name: 'g', value: '11' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'e', value: '8' }] },
     { name: 'open d', tuning: [{ name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'f♯', value: '10' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'd', value: '6' }] },
-    { name: 'open g', tuning: [{ name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'g', value: '11' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'd', value: '6' }] }
+    { name: 'open g', tuning: [{ name: 'd', value: '6' }, { name: 'b', value: '3' }, { name: 'g', value: '11' }, { name: 'd', value: '6' }, { name: 'g', value: '11' }, { name: 'd', value: '6' }] },
+    { name: 'DADGAD', tuning: [{ name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'g', value: '11' }, { name: 'd', value: '6' }, { name: 'a', value: '1' }, { name: 'd', value: '6' }] }
 ]
 
 const chromaticNotes = [
