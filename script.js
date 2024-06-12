@@ -106,7 +106,7 @@ const standardTuning = [
 ]
 
 window.onload = () => {
-    let fretboard = new Fretboard(standardTuning, [], document.getElementById('fretboard'));
+    let fretboard = new Fretboard(standardTuning, document.getElementById('fretboard'));
     let chordSelector = new ChordSelector(document.getElementById('chordSelector'));
     let tuningSelector = new TuningSelector(document.getElementById('tuningSelector'), fretboard);
     fretboard.chordSelector = chordSelector
@@ -114,11 +114,11 @@ window.onload = () => {
 };
 
 class Fretboard {
-    constructor(tuning, selectedNotes, containerEl) {
+    constructor(tuning, containerEl) {
         this.fretboardEl = document.createElement('table');
         this.noteColors = []
         this.setTuning(tuning)
-        this.setSelectedNotes(selectedNotes)
+        this.setSelectedNotes([])
         this.render()
         containerEl.replaceChildren(this.fretboardEl);
     }
@@ -171,6 +171,8 @@ class Fretboard {
             fretCellEl.innerHTML = fretNumber == 0 ? '||' : '———';
         }
     }
+
+ 
     
     // todo add to fretboard class
     // numberOfFrets is not defined wiithin the scope of the Fretboard class.
@@ -183,7 +185,7 @@ class Fretboard {
         }
         fretboard.appendChild(fretNumbersRow);
     }
-
+    
     renderString(stringNumber) {
         const string = this.fretboardEl.appendChild(document.createElement('tr'));
         let currentNote = this.findNoteByName(this.tuning[stringNumber].name)
@@ -356,9 +358,6 @@ class ChordSelector {
                 }
             }
         }
-        // var fretboard = new Fretboard(this.getTuning(), this.selectedNotes, document.getElementById('fretboard'));
-        // this.fretboard = fretboard
-        // fretboard.chordSelector = this
         this.fretboard.setTuning(this.getTuning())
         this.fretboard.setSelectedNotes(this.selectedNotes)
         this.fretboard.render()
@@ -371,21 +370,6 @@ class TuningSelector {
         this.fretboard = fretboard
         this.createTuningSelector(parentEl)
     }
-
-    // createTuningDropdown() {
-    //     const tuningEl = document.createElement('select');
-    //     tuningEl.id = 'tuningId'
-    //     const emptyOptionEl = document.createElement('option');
-    //     tuningEl.appendChild(emptyOptionEl);
-    //     for (let j = 0; j < alternatteTunings.length; j++) {
-    //         const optionEl = document.createElement('option');
-    //         optionEl.value = alternatteTunings[j].name;
-    //         optionEl.innerText = alternatteTunings[j].name;
-    //         tuningEl.appendChild(optionEl);
-    //     }
-    //     return tuningEl;
-    // }
-
 
     createTuningDropdown(tuning) {
         const tuningDropdownEl = document.createElement('select');
