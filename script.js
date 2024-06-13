@@ -106,7 +106,7 @@ const standardTuning = [
 ]
 
 window.onload = () => {
-    let fretboard = new Fretboard(standardTuning, [], document.getElementById('fretboard'));
+    let fretboard = new Fretboard(standardTuning, document.getElementById('fretboard'));
     let chordSelector = new ChordSelector(document.getElementById('chordSelector'));
     let tuningSelector = new TuningSelector(document.getElementById('tuningSelector'), fretboard);
     fretboard.chordSelector = chordSelector
@@ -114,11 +114,11 @@ window.onload = () => {
 };
 
 class Fretboard {
-    constructor(tuning, selectedNotes, containerEl) {
+    constructor(tuning, containerEl) {
         this.fretboardEl = document.createElement('table');
         this.noteColors = []
         this.setTuning(tuning)
-        this.setSelectedNotes(selectedNotes)
+        this.setSelectedNotes([])
         this.render()
         containerEl.replaceChildren(this.fretboardEl);
     }
@@ -163,14 +163,22 @@ class Fretboard {
     renderFret(fretCellEl, currentNote, fretNumber) {
         //TODO: somehow differentiate different chord positions (e.g. the root vs. the minor third...or at least the first dropdown vs. the second)
         if(this.isNoteInChord(currentNote)) {
-            fretCellEl.innerHTML = fretNumber == 0 ? '<span class="open">||</span>' : '&nbsp;&nbsp;&nbsp;';
+            fretCellEl.innerHTML = fretNumber == 0 ? '<div class="open">||</div>' : '';
             fretCellEl.style.backgroundColor = this.noteColors.find((noteColor) => 
                noteColor.name === currentNote.name).color
             fretCellEl.style.borderColor = fretNumber == 0 ? 'none' : this.noteColors[0].color
+            if (fretNumber > 0) {
+                fretCellEl.classList.add('inChord')
+                let noteNameEl = document.createElement('div')
+                noteNameEl.innerHTML = currentNote.name
+                fretCellEl.appendChild(noteNameEl)
+            }
         } else {
             fretCellEl.innerHTML = fretNumber == 0 ? '||' : '———';
         }
     }
+
+ 
     
     // todo add to fretboard class
     // numberOfFrets is not defined wiithin the scope of the Fretboard class.
@@ -183,7 +191,7 @@ class Fretboard {
         }
         fretboard.appendChild(fretNumbersRow);
     }
-
+    
     renderString(stringNumber) {
         const string = this.fretboardEl.appendChild(document.createElement('tr'));
         let currentNote = this.findNoteByName(this.tuning[stringNumber].name)
@@ -356,9 +364,6 @@ class ChordSelector {
                 }
             }
         }
-        // var fretboard = new Fretboard(this.getTuning(), this.selectedNotes, document.getElementById('fretboard'));
-        // this.fretboard = fretboard
-        // fretboard.chordSelector = this
         this.fretboard.setTuning(this.getTuning())
         this.fretboard.setSelectedNotes(this.selectedNotes)
         this.fretboard.render()
@@ -371,21 +376,6 @@ class TuningSelector {
         this.fretboard = fretboard
         this.createTuningSelector(parentEl)
     }
-
-    // createTuningDropdown() {
-    //     const tuningEl = document.createElement('select');
-    //     tuningEl.id = 'tuningId'
-    //     const emptyOptionEl = document.createElement('option');
-    //     tuningEl.appendChild(emptyOptionEl);
-    //     for (let j = 0; j < alternatteTunings.length; j++) {
-    //         const optionEl = document.createElement('option');
-    //         optionEl.value = alternatteTunings[j].name;
-    //         optionEl.innerText = alternatteTunings[j].name;
-    //         tuningEl.appendChild(optionEl);
-    //     }
-    //     return tuningEl;
-    // }
-
 
     createTuningDropdown(tuning) {
         const tuningDropdownEl = document.createElement('select');
