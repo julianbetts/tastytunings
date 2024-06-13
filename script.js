@@ -163,10 +163,16 @@ class Fretboard {
     renderFret(fretCellEl, currentNote, fretNumber) {
         //TODO: somehow differentiate different chord positions (e.g. the root vs. the minor third...or at least the first dropdown vs. the second)
         if(this.isNoteInChord(currentNote)) {
-            fretCellEl.innerHTML = fretNumber == 0 ? '<span class="open">||</span>' : '&nbsp;&nbsp;&nbsp;';
+            fretCellEl.innerHTML = fretNumber == 0 ? '<div class="open">||</div>' : '';
             fretCellEl.style.backgroundColor = this.noteColors.find((noteColor) => 
                noteColor.name === currentNote.name).color
             fretCellEl.style.borderColor = fretNumber == 0 ? 'none' : this.noteColors[0].color
+            if (fretNumber > 0) {
+                fretCellEl.classList.add('inChord')
+                let noteNameEl = document.createElement('div')
+                noteNameEl.innerHTML = currentNote.name
+                fretCellEl.appendChild(noteNameEl)
+            }
         } else {
             fretCellEl.innerHTML = fretNumber == 0 ? '||' : '———';
         }

@@ -6,21 +6,22 @@ body {
 }
 
 div {
-    clear: left;
     float: left;
 }
 
 h1 {
+    float: left;
     font-family: "Ultra", serif;
     font-weight: 400;
     font-style: normal;
 }
 
-span.open {
+div.open {
     font-weight: bold;
 }
 
 .notesInChord {
+    display: none; /* turns key invisible */
     clear: left;
     float: left;
     height: 1em;
@@ -37,7 +38,7 @@ span.open {
     width: 40px;
 }
 
-.notesInChord li div {
+.notesInChord li div, td.inChord div {
     background-color: white;
     border-radius: 15px;
     height: 30px;
@@ -48,21 +49,29 @@ span.open {
     width: 30px;
 }
 
+.tuningSelector, .chordShapeSelector, .rootNoteSelector {
+    margin-left: 30px;
+    margin-top: 20px;
+}
 
-.tuningSelector {
-    clear: left;
-    margin-top: 10px
+#fretboard {
+    margin-top: 25px;
 }
 
 #fretboard td {
     border: 1px solid #fff;
     border-right: 1px solid #000;
-    height: 20px;
-    width: 20px;
+    height: 40px;
+    width: 40px;
 }
 
 #fretboard td:first-of-type {
     border-right: none;
+}
+
+#fretboard td div {
+    clear: none;
+    float: left;
 }
 
 
