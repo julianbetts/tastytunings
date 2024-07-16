@@ -165,7 +165,7 @@ class Fretboard {
         if(this.isNoteInChord(currentNote)) {
             fretCellEl.innerHTML = fretNumber == 0 ? '<span class="open">||</span>' : '&nbsp;&nbsp;&nbsp;';
             fretCellEl.style.backgroundColor = this.noteColors.find((noteColor) => 
-               noteColor.name === currentNote.name).color
+               noteColor.noteValue === currentNote.value).color
             fretCellEl.style.borderColor = fretNumber == 0 ? 'none' : this.noteColors[0].color
         } else {
             fretCellEl.innerHTML = fretNumber == 0 ? '||' : '———';
@@ -303,7 +303,9 @@ class ChordSelector {
             let note = document.createElement('div')
             note.innerHTML = this.selectedNotes[i]
             noteContainer.appendChild(note)
-            this.fretboard.noteColors.push({name: this.selectedNotes[i], color: gradient[i]})
+            this.fretboard.noteColors.push({name: this.selectedNotes[i], noteValue: chromaticNotes.find((note) => {
+                return note.name === this.selectedNotes[i]
+            }).value, color: gradient[i]})
             this.notesInChordEl.appendChild(noteContainer)
         }
     }
