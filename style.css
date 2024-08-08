@@ -54,6 +54,11 @@ div.open {
     margin-top: 20px;
 }
 
+#resetButton {
+    margin-left: 30px;
+    margin-top: 36px;
+}
+
 #fretboard {
     margin-top: 25px;
 }
