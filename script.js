@@ -114,7 +114,11 @@ window.onload = () => {
     fretboard.chordSelector = chordSelector
     fretboard.tuningSelector = tuningSelector
     chordSelector.fretboard = fretboard
-
+    function refreshPage() {
+        window.location.reload();
+    }
+    const resetButton = document.getElementById('resetButton');
+    resetButton.addEventListener('click', refreshPage);
 };
 
 class Fretboard {
@@ -448,13 +452,4 @@ function createChromaticDropdown(tuning) {
     return chordNote;
 }
 
-// Function to refresh the webpage
-function refreshPage() {
-    window.location.reload();
-}
 
-// Get the button element by its ID
-const resetButton = document.getElementById('resetButton');
-
-// Add an event listener to the button to call refreshPage when clicked
-resetButton.addEventListener('click', refreshPage);
