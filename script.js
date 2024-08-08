@@ -86,18 +86,18 @@ const chordShapes = [
     { name: 'suspended 4th', value: [0, 5, 7] },
     { name: 'diminished', value: [0, 3, 6] },
     { name: 'augmented', value: [0, 4, 8] },
-    { name: 'hendrix', value: [0, 4, 7, 10, 3] }
-]
-
-const modes = [
-    { name: 'Ionian', value: [0, 2, 4, 5, 7, 9, 11] },
+    { name: 'hendrix', value: [0, 4, 7, 10, 3] },
+    { name: 'Pentatonic Minor', value: [0, 3, 5, 7, 10] },
+    { name: 'Pentatonic Major', value: [0, 2, 4, 7, 9] },
+    { name: 'Ionian (Major)', value: [0, 2, 4, 5, 7, 9, 11] },
     { name: 'Dorian', value: [0, 2, 3, 5, 7, 9, 10] },
     { name: 'Phrygian', value: [0, 1, 3, 5, 7, 8, 10] },
     { name: 'Lydian', value: [0, 2, 4, 6, 7, 9, 11] },
     { name: 'Mixolydian', value: [0, 2, 4, 5, 7, 9, 10] },
-    { name: 'Aeolian', value: [0, 2, 3, 5, 7, 8, 10] },
+    { name: 'Aeolian (Minor)', value: [0, 2, 3, 5, 7, 8, 10] },
     { name: 'Locrian', value: [0, 1, 3, 5, 6, 8, 10] }
 ]
+
 const standardTuning = [ 
     { name: 'e', value: 8 },
     { name: 'b', value: 3 }, 
@@ -114,7 +114,11 @@ window.onload = () => {
     fretboard.chordSelector = chordSelector
     fretboard.tuningSelector = tuningSelector
     chordSelector.fretboard = fretboard
-
+    function refreshPage() {
+        window.location.reload();
+    }
+    const resetButton = document.getElementById('resetButton');
+    resetButton.addEventListener('click', refreshPage);
 };
 
 class Fretboard {
@@ -447,3 +451,5 @@ function createChromaticDropdown(tuning) {
     }
     return chordNote;
 }
+
+

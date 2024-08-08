@@ -10,19 +10,8 @@
         <title>Tasty Tunings</title>
     </head>
     <body>
-        <h1>Tasty Tunings</h1>
-        <div id="chordSelector">
-            <form>
-                <div class="rootNoteSelector">
-                    <label for="rootNote ">Root Note:</label>
-                    <br>
-                </div>
-                <div class="chordShapeSelector">
-                    <label for="chordShape">Chord Shape:</label>
-                    <br>
-                </div>
-            </form>
-        </div>
+    <h1>Tasty Tunings</h1>
+    <script src="script.js"></script>
         <div id="tuningSelector">
             <form>
                 <div class="tuningSelector">
@@ -30,6 +19,21 @@
                     <br>
                 </div>
             </form>
+        </div>
+        <div id="chordSelector">
+            <form>
+                <div class="rootNoteSelector">
+                    <label for="rootNote ">Root Note:</label>
+                    <br>
+                </div>
+                <div class="chordShapeSelector">
+                    <label for="chordShape">Chord or Scale:</label>
+                    <br>
+                </div>
+            </form>
+        </div>
+        <div>        
+            <button id="resetButton">Reset</button>
         </div>
         <div id="fretboard"></div>
         <ul id="notesInChord" class="notesInChord">
