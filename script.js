@@ -87,8 +87,8 @@ const chordShapes = [
     { name: 'diminished', value: [0, 3, 6] },
     { name: 'augmented', value: [0, 4, 8] },
     { name: 'hendrix', value: [0, 4, 7, 10, 3] },
-    { name: 'Pentatonic Minor', value: [0, 2, 4, 5, 7, 9, 11] },
-    { name: 'Pentatonic Major', value: [0, 2, 4, 5, 7, 9, 11] },
+    { name: 'Pentatonic Minor', value: [0, 3, 5, 7, 10] },
+    { name: 'Pentatonic Major', value: [0, 2, 4, 7, 9] },
     { name: 'Ionian (Major)', value: [0, 2, 4, 5, 7, 9, 11] },
     { name: 'Dorian', value: [0, 2, 3, 5, 7, 9, 10] },
     { name: 'Phrygian', value: [0, 1, 3, 5, 7, 8, 10] },
@@ -97,6 +97,7 @@ const chordShapes = [
     { name: 'Aeolian (Minor)', value: [0, 2, 3, 5, 7, 8, 10] },
     { name: 'Locrian', value: [0, 1, 3, 5, 6, 8, 10] }
 ]
+
 const standardTuning = [ 
     { name: 'e', value: 8 },
     { name: 'b', value: 3 }, 
@@ -446,3 +447,14 @@ function createChromaticDropdown(tuning) {
     }
     return chordNote;
 }
+
+// Function to refresh the webpage
+function refreshPage() {
+    window.location.reload();
+}
+
+// Get the button element by its ID
+const resetButton = document.getElementById('resetButton');
+
+// Add an event listener to the button to call refreshPage when clicked
+resetButton.addEventListener('click', refreshPage);
