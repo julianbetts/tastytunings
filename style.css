@@ -1,9 +1,25 @@
 body {
+    display: flex;
+    justify-content: center; /* align horizontal */
+    align-items: center; /* align vertical */
+    height: 100vh; /* full height of the viewport */
+    margin: 0;
+}
+
+#contentWrapper {
     font-family: 'Courier New', Courier, monospace;
-    margin: 0 auto;
-    padding: 20px;
+    height: 430px;
+    margin: 0;
+    padding: 8px;
     width: 800px;
 }
+
+#header {
+    float: none;
+    width: 784px;
+}
+
+/* other styles remain the same */
 
 div {
     float: left;

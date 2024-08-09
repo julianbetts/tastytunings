@@ -114,11 +114,28 @@ window.onload = () => {
     fretboard.chordSelector = chordSelector
     fretboard.tuningSelector = tuningSelector
     chordSelector.fretboard = fretboard
+
     function refreshPage() {
         window.location.reload();
     }
     const resetButton = document.getElementById('resetButton');
     resetButton.addEventListener('click', refreshPage);
+
+    function scaleBody() {
+        var scale = 1;
+        const contentWidth = 828;
+        const contentHeight = 430;
+        const contentWrapper = document.querySelector('#contentWrapper');
+        const widthScale = window.innerWidth / contentWidth;
+        const heightScale = window.innerHeight / contentHeight;
+        if (widthScale > 1 || heightScale < widthScale) {
+            scale = Math.min(widthScale, heightScale);
+            contentWrapper.style.transform = `scale(${scale})`;
+            console.log(widthScale, heightScale, scale);
+        }
+    }
+    window.onresize = scaleBody;
+    scaleBody();
 };
 
 class Fretboard {

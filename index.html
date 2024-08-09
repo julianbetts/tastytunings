@@ -1,7 +1,8 @@
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
-        <script src="script.js" defer></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="style.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -9,35 +10,39 @@
         <title>Tasty Tunings</title>
     </head>
     <body>
-    <h1>Tasty Tunings</h1>
-    <script src="script.js"></script>
-        <div id="tuningSelector">
-            <form>
-                <div class="tuningSelector">
-                    <label for="tuning">Tuning:</label>
-                    <br>
+        <div id="contentWrapper">
+            <div id="header">
+                <h1>Tasty Tunings</h1>
+                <div id="tuningSelector">
+                    <form>
+                        <div class="tuningSelector">
+                            <label for="tuning">Tuning:</label>
+                            <br>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
-        <div id="chordSelector">
-            <form>
-                <div class="rootNoteSelector">
-                    <label for="rootNote ">Root Note:</label>
-                    <br>
+                <div id="chordSelector">
+                    <form>
+                        <div class="rootNoteSelector">
+                            <label for="rootNote ">Root Note:</label>
+                            <br>
+                        </div>
+                        <div class="chordShapeSelector">
+                            <label for="chordShape">Chord or Scale:</label>
+                            <br>
+                        </div>
+                    </form>
                 </div>
-                <div class="chordShapeSelector">
-                    <label for="chordShape">Chord or Scale:</label>
-                    <br>
+                <div>        
+                    <button id="resetButton">Reset</button>
                 </div>
-            </form>
+            </div>
+            <div id="fretboard"></div>
+            <ul id="notesInChord" class="notesInChord">
+                <li></li>
+            </ul>
         </div>
-        <div>        
-            <button id="resetButton">Reset</button>
-        </div>
-        <div id="fretboard"></div>
-        <ul id="notesInChord" class="notesInChord">
-            <li></li>
-        </ul>
+        <script src="script.js"></script>
     </body>
 </html>
 <!-- test -->
