@@ -11,7 +11,26 @@ body {
     height: 430px;
     margin: 0;
     padding: 8px;
+    position: relative;
     width: 800px;
+}
+
+#flipIt {
+    display: none;
+    position: absolute;
+    top: 200px;
+    left: 100px;
+    color: #337;
+    font-size: 3em;
+    font-weight: bold;
+    text-shadow: -2px 0 #aae, 0 2px #aae, 2px 0 #aae, 0 -2px #aae;
+    transform: skewX(-20deg) rotate(-30deg);
+}
+
+@media screen and (max-width: 600px) and (orientation: portrait) {
+    #flipIt {
+        display: block;
+    }
 }
 
 #header {
