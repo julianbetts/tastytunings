@@ -128,11 +128,11 @@ window.onload = () => {
         const contentWrapper = document.querySelector('#contentWrapper');
         const widthScale = window.innerWidth / contentWidth;
         const heightScale = window.innerHeight / contentHeight;
-        if (widthScale > 1 || heightScale < widthScale) {
+        //if (widthScale > 1 || heightScale < widthScale) {
             scale = Math.min(widthScale, heightScale);
             contentWrapper.style.transform = `scale(${scale})`;
             console.log(widthScale, heightScale, scale);
-        }
+        //}
     }
     window.onresize = scaleBody;
     scaleBody();
