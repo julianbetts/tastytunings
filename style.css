@@ -19,12 +19,13 @@ body {
     display: none;
     position: absolute;
     top: 200px;
-    left: 100px;
+    left: 60px;
     color: #337;
     font-size: 3em;
     font-weight: bold;
     text-shadow: -2px 0 #aae, 0 2px #aae, 2px 0 #aae, 0 -2px #aae;
     transform: skewX(-20deg) rotate(-30deg);
+    width: 700px;
 }
 
 @media screen and (max-width: 600px) and (orientation: portrait) {
