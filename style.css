@@ -26,6 +26,7 @@ body {
     text-shadow: -2px 0 #aae, 0 2px #aae, 2px 0 #aae, 0 -2px #aae;
     transform: skewX(-20deg) rotate(-30deg);
     width: 700px;
+    white-space: nowrap;
 }
 
 @media screen and (max-width: 600px) and (orientation: portrait) {
