@@ -3,7 +3,7 @@
 //todo toggle switch between chord and scale
 //todo change updateSelectedChord to a class? so i can use it for the alternate tuning dropdown event listener?
 //todo make rootNote bold
-const numberOfFrets = 17
+const numberOfFrets = 13
 const gradientStartColor = [0x58, 0x0C, 0x30]
 const gradientEndColor = [0xDB, 0xEB, 0xFA]
 const getColorFromHexArray = (hexArray) => {

@@ -247,25 +247,13 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Fret markers (dots) */
-#fretboard th:nth-child(4),
-#fretboard th:nth-child(6),
-#fretboard th:nth-child(8),
-#fretboard th:nth-child(10),
-#fretboard th:nth-child(13),
-#fretboard th:nth-child(15),
-#fretboard th:nth-child(17) {
-    position: relative;
-}
-
-#fretboard th:nth-child(4)::after,
-#fretboard th:nth-child(6)::after,
-#fretboard th:nth-child(8)::after,
-#fretboard th:nth-child(10)::after,
-#fretboard th:nth-child(13)::after,
-#fretboard th:nth-child(15)::after,
-#fretboard th:nth-child(17)::after {
-    display: none;
+/* Black text for specific fret markers */
+#fretboard th:nth-child(2),
+#fretboard th:nth-child(5),
+#fretboard th:nth-child(7),
+#fretboard th:nth-child(9),
+#fretboard th:nth-child(14) {
+    color: #000000;
 }
 
 /* Fretboard cells */
@@ -328,14 +316,7 @@ body {
 }
 
 #fretboard td:not(:first-child)::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--fret-metal), transparent);
-    opacity: 0.3;
+    display: none;
 }
 
 /* Selected notes styling */
