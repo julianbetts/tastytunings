@@ -427,20 +427,118 @@ body {
     }
     
     .app-title {
-        font-size: 2rem;
+        font-size: 1.5rem;
+        margin-bottom: var(--spacing-sm);
     }
     
     .controls-panel {
         grid-template-columns: 1fr;
         gap: var(--spacing-sm);
+        padding: var(--spacing-sm);
+    }
+    
+    .control-group {
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .modern-select {
+        font-size: 1rem;
+        padding: 14px 16px;
+    }
+    
+    .reset-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 24px;
     }
     
     .fretboard-container {
         padding: var(--spacing-sm);
+        overflow-x: auto;
+    }
+    
+    #fretboard {
+        min-width: 600px;
+        padding: 15px;
     }
     
     #fretboard table {
         min-width: 600px;
+    }
+    
+    #fretboard th:not(:first-child) {
+        min-width: 35px;
+        font-size: 0.7rem;
+        padding: 6px 2px;
+    }
+    
+    #fretboard td {
+        height: 40px;
+        width: 35px;
+        font-size: 0.8rem;
+    }
+    
+    .notes-display {
+        padding: var(--spacing-sm);
+    }
+    
+    .notes-title {
+        font-size: 1rem;
+    }
+    
+    .notes-list {
+        gap: var(--spacing-xs);
+    }
+    
+    .notes-list li {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .app-container {
+        padding: 8px;
+    }
+    
+    .app-title {
+        font-size: 1.3rem;
+    }
+    
+    .controls-panel {
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .modern-select {
+        font-size: 0.9rem;
+        padding: 12px 14px;
+    }
+    
+    #fretboard {
+        min-width: 500px;
+        padding: 10px;
+    }
+    
+    #fretboard table {
+        min-width: 500px;
+    }
+    
+    #fretboard th:not(:first-child) {
+        min-width: 30px;
+        font-size: 0.6rem;
+        padding: 4px 1px;
+    }
+    
+    #fretboard td {
+        height: 35px;
+        width: 30px;
+        font-size: 0.7rem;
+    }
+    
+    .notes-list li {
+        padding: 4px 8px;
+        font-size: 0.7rem;
     }
 }
 
