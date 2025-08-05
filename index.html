@@ -1,49 +1,67 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="style.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Ultra&display=swap" rel="stylesheet">
-        <title>Tasty Tunings</title>
-    </head>
-    <body>
-        <div id="contentWrapper">
-            <div id="flipIt">Flip your shit sideways!</div>
-            <div id="header">
-                <h1>Tasty Tunings</h1>
-                <div id="tuningSelector">
-                    <form>
-                        <div class="tuningSelector">
-                            <label for="tuning">Tuning:</label>
-                            <br>
-                        </div>
-                    </form>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Tasty Tunings - Guitar Chord & Scale Finder</title>
+</head>
+<body>
+    <div class="app-container">
+        <main class="app-main">
+            <div class="controls-panel">
+                <h1 class="app-title">Tasty Tunings</h1>
+
+                <div class="control-group">
+                    <label class="control-label" for="tuning-select">Tuning</label>
+                    <div class="select-wrapper">
+                        <select id="tuning-select" class="modern-select">
+                            <option value="">Select tuning...</option>
+                        </select>
+                    </div>
                 </div>
-                <div id="chordSelector">
-                    <form>
-                        <div class="rootNoteSelector">
-                            <label for="rootNote ">Root Note:</label>
-                            <br>
-                        </div>
-                        <div class="chordShapeSelector">
-                            <label for="chordShape">Chord or Scale:</label>
-                            <br>
-                        </div>
-                    </form>
+
+                <div class="control-group">
+                    <label class="control-label" for="root-note">Root Note</label>
+                    <div class="select-wrapper">
+                        <select id="root-note" class="modern-select">
+                            <option value="">Select note...</option>
+                        </select>
+                    </div>
                 </div>
-                <div>        
-                    <button id="resetButton">Reset</button>
+
+                <div class="control-group">
+                    <label class="control-label" for="chord-shape">Chord/Scale</label>
+                    <div class="select-wrapper">
+                        <select id="chord-shape" class="modern-select">
+                            <option value="">Select chord/scale...</option>
+                        </select>
+                    </div>
                 </div>
+
+                <button id="reset-button" class="reset-btn">
+                    Reset
+                </button>
             </div>
-            <div id="fretboard"></div>
-            <ul id="notesInChord" class="notesInChord">
-                <li></li>
-            </ul>
+
+            <div class="fretboard-container">
+                <div id="fretboard" class="fretboard"></div>
+            </div>
+
+            <div class="notes-display">
+                <h3 class="notes-title">Notes in Selection</h3>
+                <ul id="notesInChord" class="notes-list"></ul>
+            </div>
+        </main>
+
+        <div id="flipIt" class="flip-message">
+            <p>Flip your shit sideways!!!!!</p>
         </div>
-        <script src="script.js"></script>
-    </body>
+    </div>
+
+    <script src="script.js"></script>
+</body>
 </html>
-<!-- test -->

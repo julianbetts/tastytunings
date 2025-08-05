@@ -3,7 +3,7 @@
 //todo toggle switch between chord and scale
 //todo change updateSelectedChord to a class? so i can use it for the alternate tuning dropdown event listener?
 //todo make rootNote bold
-const numberOfFrets = 17
+const numberOfFrets = 13
 const gradientStartColor = [0x58, 0x0C, 0x30]
 const gradientEndColor = [0xDB, 0xEB, 0xFA]
 const getColorFromHexArray = (hexArray) => {
@@ -118,25 +118,21 @@ window.onload = () => {
     function refreshPage() {
         window.location.reload();
     }
-    const resetButton = document.getElementById('resetButton');
+    const resetButton = document.getElementById('reset-button');
     resetButton.addEventListener('click', refreshPage);
 
-    function scaleBody() {
-        var scale = 1;
-        const contentWidth = 828;
-        const contentHeight = 430;
-        const contentWrapper = document.querySelector('#contentWrapper');
-        const widthScale = window.innerWidth / contentWidth;
-        const heightScale = window.innerHeight / contentHeight;
-        //if (widthScale > 1 || heightScale < widthScale) {
-            scale = Math.min(widthScale, heightScale);
-            contentWrapper.style.transform = `scale(${scale})`;
-            console.log(widthScale, heightScale, scale);
-        //}
-    }
-    window.onresize = scaleBody;
-    scaleBody();
+    // Add smooth animations and modern interactions
+    addModernInteractions();
 };
+
+function addModernInteractions() {
+    // Add loading animation
+    document.body.style.opacity = '0';
+    setTimeout(() => {
+        document.body.style.transition = 'opacity 0.6s ease-in-out';
+        document.body.style.opacity = '1';
+    }, 100);
+}
 
 class Fretboard {
     constructor(tuning, containerEl) {
@@ -186,20 +182,29 @@ class Fretboard {
     }
 
     renderFret(fretCellEl, currentNote, fretNumber) {
-        //TODO: somehow differentiate different chord positions (e.g. the root vs. the minor third...or at least the first dropdown vs. the second)
+        // Enhanced guitar-like rendering
         if(this.isNoteInChord(currentNote)) {
-            fretCellEl.innerHTML = fretNumber == 0 ? '<div class="open">||</div>' : '';
-            fretCellEl.style.backgroundColor = this.noteColors.find((noteColor) => 
-               noteColor.noteValue === currentNote.value).color
-            fretCellEl.style.borderColor = fretNumber == 0 ? 'none' : this.noteColors[0].color
-            if (fretNumber > 0) {
-            fretCellEl.classList.add('inChord')
+            if (fretNumber == 0) {
+                fretCellEl.innerHTML = '<div class="open">||</div>';
+            } else {
                 let noteNameEl = document.createElement('div')
                 noteNameEl.innerHTML = currentNote.name
+                noteNameEl.className = 'fret-note'
                 fretCellEl.appendChild(noteNameEl)
             }
+            
+            // Set note color
+            const noteColor = this.noteColors.find((noteColor) => 
+               noteColor.noteValue === currentNote.value);
+            if (noteColor) {
+                fretCellEl.style.backgroundColor = noteColor.color;
+            }
         } else {
-            fretCellEl.innerHTML = fretNumber == 0 ? '||' : '———';
+            if (fretNumber == 0) {
+                fretCellEl.innerHTML = '<div class="open-string">||</div>';
+            } else {
+                fretCellEl.innerHTML = '<div class="fret-space">———</div>';
+            }
         }
     }
 
@@ -207,6 +212,7 @@ class Fretboard {
         for (let fretNumber = 0; fretNumber < numberOfFrets; fretNumber++) {
             const fretNumberCell = document.createElement('th');
             fretNumberCell.innerText = (fretNumber).toString();
+            fretNumberCell.className = 'fret-number';
             fretNumbersRow.appendChild(fretNumberCell);
             fretNumbersRow[fretNumber];
         }
@@ -215,8 +221,11 @@ class Fretboard {
     
     renderString(stringNumber) {
         const string = this.fretboardEl.appendChild(document.createElement('tr'));
+        string.className = `guitar-string string-${stringNumber + 1}`;
+        
         let currentNote = this.findNoteByName(this.tuning[stringNumber].name)
         let tuningEl = document.createElement('th')
+        tuningEl.className = 'tuning-nut';
         tuningEl.appendChild(createChromaticDropdown(this.tuning[stringNumber]))
         tuningEl.addEventListener('change', () => {
             this.tuningSelector.selectCustom()
@@ -225,8 +234,10 @@ class Fretboard {
             }
         })
         string.appendChild(tuningEl);
+        
         for (let fretNumber = 0; fretNumber < numberOfFrets; fretNumber++) {
             const fretCellEl = string.appendChild(document.createElement('td'));
+            fretCellEl.className = `fret-cell fret-${fretNumber}`;
             this.renderFret(fretCellEl, currentNote, fretNumber);
             if(currentNote.value === 12) {
                 currentNote = this.findNoteByValue(1)
@@ -252,15 +263,42 @@ class ChordSelector {
     }
 
     createChordSelector(parentEl) {
-        this.chordSelectorEl = parentEl.getElementsByTagName('form')[0]
-        this.chordSelectorEl.addEventListener('change', () => {
+        // Updated to work with new HTML structure
+        this.rootNoteSelectorEl = document.getElementById('root-note');
+        this.chordShapeSelector = document.getElementById('chord-shape');
+        
+        // Populate the dropdowns
+        this.populateDropdowns();
+        
+        // Add event listeners
+        this.rootNoteSelectorEl.addEventListener('change', () => {
             this.updateSelectedChord()
-        })
-        this.rootNoteSelectorEl = createChromaticDropdown()
-        this.chordSelectorEl.querySelector('.rootNoteSelector').appendChild(this.rootNoteSelectorEl)
-        this.chordShapeSelector = this.createChordShapeDropdown()
-        this.chordSelectorEl.querySelector('.chordShapeSelector').appendChild(this.chordShapeSelector)
-        this.notesInChordEl = document.getElementById('notesInChord')
+        });
+        this.chordShapeSelector.addEventListener('change', () => {
+            this.updateSelectedChord()
+        });
+        
+        this.notesInChordEl = document.getElementById('notesInChord');
+    }
+
+    populateDropdowns() {
+        // Populate root note dropdown
+        this.rootNoteSelectorEl.innerHTML = '<option value="">Select note...</option>';
+        chromaticNotes.forEach(note => {
+            const option = document.createElement('option');
+            option.value = note.name;
+            option.textContent = note.name;
+            this.rootNoteSelectorEl.appendChild(option);
+        });
+
+        // Populate chord shape dropdown
+        this.chordShapeSelector.innerHTML = '<option value="">Select chord/scale...</option>';
+        chordShapes.forEach(chord => {
+            const option = document.createElement('option');
+            option.value = chord.name;
+            option.textContent = chord.name;
+            this.chordShapeSelector.appendChild(option);
+        });
     }
 
     createChordShapeDropdown() {
@@ -274,34 +312,8 @@ class ChordSelector {
             optionEl.innerText = chordShapes[j].name;
             chordShapeEl.appendChild(optionEl);
         }
-        // const customOptionEl = document.createElement('option');
-        // customOptionEl.value = 'custom';
-        // customOptionEl.innerText = 'custom';
-        // chordShapeEl.appendChild(customOptionEl);
-        const rootNoteSelectorEl = this.rootNoteSelectorEl
-        //hides rootNote element when custom is selected
-        // chordShapeEl.addEventListener('change', function() {
-        //     if (chordShapeEl.value === 'custom') {
-        //         rootNoteSelectorEl.parentElement.style.display = 'none';
-        //     } else {
-        //         rootNoteSelectorEl.parentElement.style.display = 'block';
-        //     }
-        // });
         return chordShapeEl;
     }
-
-    // createCustomNoteSelector(parentEl) {
-    //     this.customNoteSelector = document.createElement('form')
-        // this.customNoteSelector.addEventListener('change', () => {
-        //     this.updateSelectedNotes()
-        // })
-    //     for (let i = 0; i < 12; i++) {
-    //         const chordNote = createChromaticDropdown()
-    //         this.customNoteSelector.appendChild(chordNote)
-    //     }
-    //     this.customNoteSelector.style.display = 'none'
-    //     parentEl.appendChild(this.customNoteSelector)
-    // }
 
     getTuning() {
         var tuning = []
@@ -316,10 +328,6 @@ class ChordSelector {
         }
         return tuning
     }
-
-    // showCustomNoteSelector() {
-    //     this.customNoteSelector.style.display = 'block'
-    // }
 
     updateNotesInChordEl() {
         this.notesInChordEl.innerHTML = ''
@@ -342,13 +350,6 @@ class ChordSelector {
     updateSelectedChord() {
         var rootNote = this.rootNoteSelectorEl.value
         var chordShape = this.chordShapeSelector.value
-        // if (chordShape === 'custom') {
-        //     this.showCustomNoteSelector()
-        //     this.updateSelectedNotes()
-        //     return false
-        // } else if (chordShape !== '') {
-        //     this.customNoteSelector.style.display = 'none'
-        // }
         if (rootNote === '' || chordShape === '') {
             return false
         } 
@@ -400,8 +401,9 @@ class TuningSelector {
     }
 
     createTuningDropdown(tuning) {
-        const tuningDropdownEl = document.createElement('select');
-        tuningDropdownEl.id = 'alternateTunings'; 
+        const tuningDropdownEl = document.getElementById('tuning-select');
+        tuningDropdownEl.innerHTML = '<option value="">Select tuning...</option>';
+        
         for (let j = 0; j < availableTunings.length; j++) {
             const optionEl = document.createElement('option');
             optionEl.value = availableTunings[j].name;
@@ -415,24 +417,22 @@ class TuningSelector {
 
             tuningDropdownEl.appendChild(optionEl);
         }
+        
         const customOptionEl = document.createElement('option')
         customOptionEl.value = 'custom'
         customOptionEl.innerText = 'custom'
         tuningDropdownEl.appendChild(customOptionEl)
+        
         tuningDropdownEl.addEventListener('change', () => {
+            this.updateSelectedTuning()
         });
+        
         return tuningDropdownEl;
     }
 
     createTuningSelector(parentEl) {
-        // const tuningSelector = fretboard.createTuningSelector();
-        // document.getElementById('tuningSelector').getElementsByTagName('form')[0].appendChild(tuningSelector);
-
-        this.tuningSelectorEl = parentEl.getElementsByTagName('form')[0]
         this.tuningSelectorDropdown = this.createTuningDropdown(this.fretboard.tuning)
-        this.tuningSelectorEl.querySelector('.tuningSelector').appendChild(this.tuningSelectorDropdown)
-        parentEl.appendChild(this.tuningSelectorEl)
-        this.tuningSelectorEl.addEventListener('change', () => {
+        this.tuningSelectorDropdown.addEventListener('change', () => {
             this.updateSelectedTuning()
         })
     }
@@ -454,6 +454,7 @@ class TuningSelector {
 
 function createChromaticDropdown(tuning) {
     const chordNote = document.createElement('select');
+    chordNote.className = 'tuning-select';
     const emptyOptionEl = document.createElement('option');
     chordNote.appendChild(emptyOptionEl);
     for (let j = 0; j < chromaticNotes.length; j++) {
