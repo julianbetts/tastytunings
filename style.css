@@ -107,16 +107,19 @@ body {
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     backdrop-filter: blur(10px);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: var(--spacing);
     align-items: end;
+    justify-content: center;
 }
 
 .control-group {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
+    min-width: 200px;
+    flex: 0 0 auto;
 }
 
 .control-label {
@@ -225,12 +228,13 @@ body {
 #fretboard th:first-child {
     background: var(--primary-gradient);
     color: white;
-    padding: 15px 8px;
+    padding: 4px 2px;
     text-align: center;
     font-weight: 700;
-    font-size: 1rem;
-    min-width: 50px;
-    height: 50px;
+    font-size: 0.6rem;
+    width: 40px;
+    max-width: 40px;
+    height: 30px;
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -278,7 +282,6 @@ body {
     right: 0;
     height: 1px;
     background: var(--string-color);
-    box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
     z-index: 1;
 }
 
@@ -421,7 +424,7 @@ body {
 }
 
 /* Responsive Design */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 600px) {
     .app-container {
         padding: var(--spacing-sm);
     }

@@ -203,7 +203,8 @@ class Fretboard {
             if (fretNumber == 0) {
                 fretCellEl.innerHTML = '<div class="open-string">||</div>';
             } else {
-                fretCellEl.innerHTML = '<div class="fret-space">———</div>';
+                // Don't add any content to empty fret cells to avoid interfering with string visualization
+                fretCellEl.innerHTML = '';
             }
         }
     }
